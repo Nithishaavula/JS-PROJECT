@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delivery Location</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .location-display {
+      background: #e9ecef;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Online Delivery - Location</h1>
+  
+  <div class="form-container">
+    <form id="deliveryForm">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="text" name="address" placeholder="Street Address" required />
+      
+      <div class="location-display" id="locationDisplay">
+        📍 Click the button to get your location
+      </div>
+      
+      <button type="button" onclick="getLocation()">Get Current Location</button>
+      
+      <input type="hidden" id="latitude" name="latitude">
+      <input type="hidden" id="longitude" name="longitude">
+      
+      <textarea name="notes" placeholder="Delivery Instructions"></textarea>
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <script>
+    function getLocation() {
+      const display = document.getElementById("locationDisplay");
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+
+            display.innerHTML = `✅ Location found:<br>Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)}`;
+          },
+          function (error) {
+            display.innerHTML = "❌ Unable to retrieve location. Please allow location access.";
+          }
+        );
+      } else {
+        display.innerHTML = "❌ Geolocation is not supported by this browser.";
+      }
+    }
+
+    // Example: capture form submission
+    document.getElementById("deliveryForm").addEventListener("submit", function (e) {
+      e.preventDefault(); // Stop actual submission for demo
+
+      const name = this.name.value;
+      const address = this.address.value;
+      const lat = this.latitude.value;
+      const lon = this.longitude.value;
+
+      alert(`Order received!\nName: ${name}\nAddress: ${address}\nLocation: ${lat}, ${lon}`);
+      // Here you would send this data to your backend using fetch() or form submission
+    });
+  </script>
+
+</body>
+</html>

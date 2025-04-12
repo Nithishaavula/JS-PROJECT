@@ -66,6 +66,29 @@
     .links a:hover{
         color: rgb(227, 74, 8);
     }
+    .guest{
+        background-color: white;
+        color: rgb(227, 74, 8);
+        font-size: 1.5rem;
+        padding: 1% 2%;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+        border-radius: 100px;
+        font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .guest:hover{
+        background-color: rgb(227, 74, 8);
+        color: white;
+    }
+    .guest a{
+        text-decoration: none;
+        color: rgb(227, 74, 8);
+    }
+    .guest :hover{
+        color: white;
+    }
     </style>
     </head>
 <body>
@@ -82,7 +105,8 @@
                 <a href="signup.html" id="signup"> Don't have an account ? Sign Up</a>
                 <a href="forgot.html" id="forgot">Forgot Password?</a>
                 </div>
-                <input type="submit" value="Continue" id="continue">
+                <input type="submit" value="Continue" id="continue"><br>
+                <button class="guest"><a href="page1.html">Login as a Guest</a></button>
             </form>
         </div>
     </div>
@@ -148,8 +172,9 @@
            // alert(errorMessage);
         //  });
        //})
-
-
+         
+    
+       
          
     </script>
     </body>
