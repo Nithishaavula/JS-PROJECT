@@ -5,105 +5,169 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Delivery Location</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      padding: 20px;
-      margin: 0;
-    }
-    h1 {
-      text-align: center;
-      color: #007bff;
-    }
-    .form-container {
-      max-width: 500px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #28a745;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .location-display {
-      background: #e9ecef;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
+
   </style>
 </head>
 <body>
 
-  <h1>Online Delivery - Location</h1>
   
-  <div class="form-container">
-    <form id="deliveryForm">
-      <input type="text" name="name" placeholder="Full Name" required />
-      <input type="text" name="address" placeholder="Street Address" required />
-      
-      <div class="location-display" id="locationDisplay">
-        📍 Click the button to get your location
-      </div>
-      
-      <button type="button" onclick="getLocation()">Get Current Location</button>
-      
-      <input type="hidden" id="latitude" name="latitude">
-      <input type="hidden" id="longitude" name="longitude">
-      
-      <textarea name="notes" placeholder="Delivery Instructions"></textarea>
-      <button type="submit">Place Order</button>
-    </form>
-  </div>
 
   <script>
-    function getLocation() {
-      const display = document.getElementById("locationDisplay");
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function (position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-
-            document.getElementById("latitude").value = lat;
-            document.getElementById("longitude").value = lon;
-
-            display.innerHTML = `✅ Location found:<br>Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)}`;
-          },
-          function (error) {
-            display.innerHTML = "❌ Unable to retrieve location. Please allow location access.";
-          }
-        );
-      } else {
-        display.innerHTML = "❌ Geolocation is not supported by this browser.";
-      }
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log(cart);
+    
+    let container = document.createElement("div");
+    container.setAttribute("id", "container");
+    container.style.width = "100%";
+    container.style.minHeight = "100vh";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.alignItems = "center";
+    container.style.justifyContent = "center";
+    container.style.backgroundColor = "white";
+    container.style.fontFamily = "Arial, sans-serif";
+    container.style.fontSize = "30px";
+    container.style.fontWeight = "bold";
+    container.style.color = "black";
+    container.style.textAlign = "center";
+    container.style.padding = "20px";
+    container.style.boxSizing = "border-box";
+    container.style.border = "2px solid black";
+    container.style.borderRadius = "10px";
+    container.style.margin = "20px auto";
+    container.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+    container.style.transition = "all 0.3s ease-in-out";
+    
+    if (cart.length === 0) {
+      container.innerHTML = `<h1>Cart is empty</h1>`;
+    } else {
+      container.innerHTML = "Items in your cart are:<br><br>";
+    
+      let totalPrice = 0;
+    
+      cart.forEach((el, index) => {
+        totalPrice += Number(el.price); // Calculate total
+    
+        let item = document.createElement("div");
+        item.innerText = `${el.name} - ₹${el.price}`;
+        item.style.width = "100%";
+        item.style.height = "100px";
+        item.style.display = "flex";
+        item.style.alignItems = "center";
+        item.style.justifyContent = "space-between";
+        item.style.padding = "10px";
+        item.style.boxSizing = "border-box";
+        item.style.border = "2px solid black";
+        item.style.borderRadius = "10px";
+        item.style.margin = "10px 0";
+        item.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+        item.style.transition = "all 0.3s ease-in-out";
+        item.style.backgroundColor = "white";
+        item.style.color = "black";
+        item.style.fontSize = "20px";
+    
+        let removeBtn = document.createElement("button");
+        removeBtn.innerText = "Remove from cart";
+        removeBtn.style.width = "150px";
+        removeBtn.style.height = "40px";
+        removeBtn.style.backgroundColor = "red";
+        removeBtn.style.color = "white";
+        removeBtn.style.border = "none";
+        removeBtn.style.borderRadius = "5px";
+        removeBtn.style.cursor = "pointer";
+    
+        removeBtn.addEventListener("mouseover", function () {
+          removeBtn.style.transform = "scale(1.05)";
+          removeBtn.style.boxShadow = "0 0 20px rgba(0, 0, 0, 0.5)";
+          removeBtn.style.backgroundColor = "white";
+          removeBtn.style.color = "black";
+        });
+        removeBtn.addEventListener("mouseout", function () {
+          removeBtn.style.transform = "scale(1)";
+          removeBtn.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.5)";
+          removeBtn.style.backgroundColor = "red";
+          removeBtn.style.color = "white";
+        });
+    
+        removeBtn.addEventListener("click", function () {
+          cart.splice(index, 1);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          window.location.reload();
+        });
+    
+        item.appendChild(removeBtn);
+        container.appendChild(item);
+      });
+    
+      // Show Total Price
+      let totalText = document.createElement("div");
+      totalText.innerText = `\nTotal Amount: ₹${totalPrice.toFixed(2)}`;
+      totalText.style.marginTop = "20px";
+      totalText.style.fontSize = "24px";
+      totalText.style.fontWeight = "bold";
+      totalText.style.color = "green";
+      container.appendChild(totalText);
+    
+      // Payment method select
+      let paymentSection = document.createElement("div");
+      paymentSection.style.marginTop = "30px";
+    
+      let label = document.createElement("label");
+      label.innerText = "Select Payment Method: ";
+      label.style.fontSize = "20px";
+    
+      let select = document.createElement("select");
+      select.style.marginLeft = "10px";
+      select.style.padding = "10px";
+      select.style.fontSize = "16px";
+      select.style.borderRadius = "5px";
+      select.style.border = "1px solid #ccc";
+    
+      let methods = ["UPI", "Card", "Cash on Delivery"];
+      methods.forEach(method => {
+        let option = document.createElement("option");
+        option.value = method;
+        option.text = method;
+        select.appendChild(option);
+      });
+    
+      paymentSection.appendChild(label);
+      paymentSection.appendChild(select);
+      container.appendChild(paymentSection);
+    
+      // Payment button
+      let payBtn = document.createElement("button");
+      payBtn.innerText = "Pay Now";
+      payBtn.style.marginTop = "20px";
+      payBtn.style.padding = "15px 30px";
+      payBtn.style.fontSize = "20px";
+      payBtn.style.backgroundColor = "green";
+      payBtn.style.color = "white";
+      payBtn.style.border = "none";
+      payBtn.style.borderRadius = "10px";
+      payBtn.style.cursor = "pointer";
+    
+      payBtn.addEventListener("click", () => {
+        let method = select.value;
+    
+        if (method === "UPI") {
+          let upiId = "merchant@upi"; // Replace with real UPI ID if needed
+          let upiUrl = `upi://pay?pa=${upiId}&pn=YourShop&am=${totalPrice.toFixed(2)}&cu=INR`;
+          window.location.href = upiUrl;
+        } else {
+          alert(`Payment of ₹${totalPrice.toFixed(2)} via ${method} Successful!`);
+          localStorage.removeItem("cart");
+          window.location.reload();
+        }
+      });
+    
+      container.appendChild(payBtn);
     }
-
-    // Example: capture form submission
-    document.getElementById("deliveryForm").addEventListener("submit", function (e) {
-      e.preventDefault(); // Stop actual submission for demo
-
-      const name = this.name.value;
-      const address = this.address.value;
-      const lat = this.latitude.value;
-      const lon = this.longitude.value;
-
-      alert(`Order received!\nName: ${name}\nAddress: ${address}\nLocation: ${lat}, ${lon}`);
-      // Here you would send this data to your backend using fetch() or form submission
-    });
+    
+    document.body.appendChild(container);
+    
+    
+    
   </script>
 
 </body>
