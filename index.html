@@ -1,220 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project</title>
-    
-    <style>
-        *{
-            margin:0;
-            padding: 0;
-            box-sizing: border-box;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreshGro - Fresh Groceries Delivered</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        }
-    .login{
-        background-color:orange;
-        display:grid;
-        justify-content: center;
-        align-content:  center;
-        font-family: Arial, Helvetica, sans-serif;
-        height:100vh;
-        width:100vw;
-        gap:2rem;
-       }
-    .childa{
-         display:grid;
-         align-items: center;
+    html {
+      scroll-behavior: smooth;
     }
-    .childa h2{
-        color:rgb(227, 74, 8);
-        font-size: 5rem;
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: #333;
     }
-    .childa h3{ 
-        color:white;
-        font-size: 2rem;
+
+    /* Animated Background Image */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width:100vw;
+      height:100vh;
+      background: url('background.jpg') repeat;
+      background-size: cover;
+      animation: panImage 100s linear infinite;
+      filter: brightness(0.65) blur(0px);
     }
-    .childb input{
-        display:grid;
-        margin-top:1rem;
-        padding:4%;
-        width:100%;
-        border-radius:100px;
+
+    @keyframes panImage {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50%, -50%); }
     }
-    #continue{
-        background-color:rgb(227, 74, 8);
-        color: white;
-        font-size: 1.5rem;
+
+    nav {
+      background:black;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-    #continue:hover{
-        background-color: orangered;
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
     }
-    h2:nth-child(2){
-        color: rgb(227, 74, 8);
-        color: white;
+
+    nav ul {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
     }
-    .links{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
     }
-    .links a{
-        text-decoration: none;
-        color: white;
-        font-size: 1.2rem;
+
+    nav ul li a:hover {
+      text-decoration: underline;
     }
-    .links a:hover{
-        color: rgb(227, 74, 8);
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .guest{
-        background-color: white;
-        color: rgb(227, 74, 8);
-        font-size: 1.5rem;
-        padding: 1% 2%;
-        border: none;
-        cursor: pointer;
-        margin-top: 1rem;
-        border-radius: 100px;
-        font-weight: bold;
-        font-family: Arial, Helvetica, sans-serif;
+
+    .nav-btn {
+      background: white;
+      color: black;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .guest:hover{
-        background-color: rgb(227, 74, 8);
-        color: white;
+
+    .nav-btn:hover {
+      background:black;
+      color: white;
     }
-    .guest a{
-        text-decoration: none;
-        color: rgb(227, 74, 8);
+
+    .nav-btn.secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid white;
     }
-    .guest :hover{
-        color: white;
+
+    .nav-btn.secondary:hover {
+      background: white;
+      color:black;
+
     }
-    </style>
-    </head>
+
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 0 20px;
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    header p {
+      max-width: 600px;
+      font-size: 1.3rem;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .cta-btn {
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #66bb6a;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition:background 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background-color:black;
+    }
+
+    section {
+      padding: 80px 20px;
+      text-align: center;
+      background: #fefefe;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .category-card {
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .testimonial {
+      margin-top: 20px;
+      font-style: italic;
+      color: #555;
+    }
+
+    .mission-section {
+      padding: 100px 20px;
+      background: linear-gradient(135deg, rgba(200,255,200,0.2), rgba(255,255,255,0.8));
+      background-image: url('mission-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      color: black;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
+    }
+
+    .mission-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .mission-section p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    footer {
+      background-color:black;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    @keyframes fadeInDown {
+      from { transform: translateY(-40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+      }
+      header h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
 <body>
-    <div class="login">
-        <div class="childa">
-            <h2>Instant</h2>
-            <h3>Groceries delivered in 10 minutes</h3>
-        </div>
-        <div class="childb">
-            <form action="page1.html" id="123">
-                <input type="email" placeholder="abc@gmail.com" id="login">
-                <input type="password" placeholder="Password" id="password">
-                <div class="links">
-                <a href="signup.html" id="signup"> Don't have an account ? Sign Up</a>
-                <a href="forgot.html" id="forgot">Forgot Password?</a>
-                </div>
-                <input type="submit" value="Continue" id="continue"><br>
-                <button class="guest"><a href="page1.html">Login as a Guest</a></button>
-            </form>
-        </div>
+
+  <!-- Animated Background -->
+  <div class="background"></div>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Instant</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="getLocation()">📍 Location</button>
+      <span id="location-text" style="font-size: 0.8rem; color: #fff;"></span>
+      <button class="nav-btn secondary" onclick="alert('Login Clicked')" id="login">Login</button>
+      <button class="nav-btn secondary" onclick="alert('Sign Up Clicked')" id="signup">Sign Up</button>
     </div>
-    <script type="module">
-         // Import the functions you need from the SDKs you need
-         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-         // TODO: Add SDKs for Firebase products that you want to use
-         // https://firebase.google.com/docs/web/setup#available-libraries
-       
-         // Your web app's Firebase configuration
-         const firebaseConfig = {
-           apiKey: "AIzaSyDhdNXZSfEgOdtA5Q8EgK8mHxpZqirQAIw",
-           authDomain: "login-sign-924a1.firebaseapp.com",
-           projectId: "login-sign-924a1",
-           storageBucket: "login-sign-924a1.firebasestorage.app",
-           messagingSenderId: "179765758950",
-           appId: "1:179765758950:web:99e4b5c74f078fc268e427"
-         };
-         const app = initializeApp(firebaseConfig);
-         const auth = getAuth(app);
-         let form=document.getElementById("123");
-         console.log(form);
-         form.addEventListener("submit",function(event){
-            event.preventDefault();
-            let login=document.getElementById("login").value;
-            let password=document.getElementById("password").value;
-            console.log(login,password);
-            signInWithEmailAndPassword(auth,login, password)
-           .then((userCredential) => {
-             // Signed in 
-             const user = userCredential.user;
-                alert("User Signed In Successfully");
-                window.location.href="page1.html";
-                console.log("succesfully signed in");
-             // ...
-           })
-           .catch((error) => {
-             const errorCode = error.code;
-             const errorMessage = error.message;
-                alert(errorMessage);
-           });
-         });
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h1>Welcome to Instant Goceries 🥬</h1>
+    <p>We deliver fresh groceries at your doorstep. Organic, clean, and always on time!</p>
+    <button class="cta-btn" onclick="shopNow()">Shop Now</button>
+  </header>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2 class="section-title">Why Instant Groceries?</h2>
+    <p>We source directly from farms and deliver within hours. Save time, eat fresh, and support local farmers.</p>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories">
+    <h2 class="section-title">Popular Categories</h2>
+    <div class="categories-grid">
+      <div class="category-card">🍅 Vegetables</div>
+      <div class="category-card">🍇 Fruits</div>
+      <div class="category-card">🥛 Dairy</div>
+      <div class="category-card">🥖 Bakery</div>
+      <div class="category-card">🍗 Meat</div>
+      <div class="category-card">🧃 Drinks</div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials">
+    <h2 class="section-title">What Our Customers Say</h2>
+    <p class="testimonial">“Best grocery delivery ever! Everything is so fresh.” – Priya</p>
+    <p class="testimonial">“No more standing in line. FreshGro is a game-changer.” – Arjun</p>
+  </section>
+
+  <!-- New Mission Section -->
+  <section class="mission-section">
+    <h2>Our Mission 🌱</h2>
+    <p>Instant Groceries is committed to building a sustainable future by connecting communities with local farmers. Every product you order supports a greener, healthier lifestyle.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>© 2025 Instant Groceries. All rights reserved.</p>
+    <p>Contact us: support@instant.com</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function shopNow() {
+      window.location.href = "page1.html";
+    }
+
+    async function getLocation() {
+      const output = document.getElementById("location-text");
+      output.textContent = "Fetching location...";
+
+      if (!navigator.geolocation) {
+        output.textContent = "Geolocation is not supported.";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        try {
+          const response = await fetch(`  https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=55cd3fb97aea49b5b07e2b170151c499&language=en&pretty=1`);
         
-       
-         // Initialize Firebase
-       //reset password
-      // import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-      // let forgot=document.getElementById("forgot");
-      // forgot.addEventListener("click",function(){
-      //  let email=document.getElementById("login").value;
+          const data = await response.json();
 
-       // const auth = getAuth(app);
-     //   sendPasswordResetEmail(auth,email)
-       //   .then(() => {
-            // Password reset email sent!
-            // ..
-          //  alert("Password reset email sent! Please check your inbox.");
-       //   })
-         // .catch((error) => {
-           // const errorCode = error.code;
-        //    const errorMessage = error.message;
-           // alert(errorMessage);
-        //  });
-       //})
-         
-    
-       
-         
-    </script>
-    </body>
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          if (data && data.results && data.results.length > 0) {
+            const components = data.results[0].components;
+            const town = components.town || components.city || components.village || components.county;
+            const state = components.state;
+            const country = components.country;
+            const fullLocation = `${town || "Unknown City"}, ${state || ""}, ${country || ""}`;
+            output.textContent = fullLocation;
+          } else {
+            output.textContent = "Location not found.";
+          }
+        } catch (err) {
+          output.textContent = "Error fetching location.";
+          console.error("Location fetch error:", err);
+        }
+      }, (error) => {
+        output.textContent = "Location permission denied.";
+        console.error("Geolocation error:", error);
+      });
+    }
+    let login=document.getElementById("login");
+    login.addEventListener("click",function(){
+      window.location.href="login.html";
+    })
+    let signup=document.getElementById("signup");
+    signup.addEventListener("click",function(){
+      window.location.href="signup.html";
+    })
+    let locationText=document.getElementById("location-text");
+    locationText.addEventListener("click",function(){
+      getLocation();
+    })
+    // Initialize Firebase
+    // Import the functions you need from the SDKs you need
+    // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    // import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    // import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+    // import { getStorage } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+  </script>
+</body>
 </html>
+
+
+
