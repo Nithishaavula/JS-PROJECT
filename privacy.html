@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FreshGrocer - Privacy Policy</title>
+  <style>
+    #privacy-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 15px;
+      text-align: center;
+      z-index: 9999;
+      display: none;
+      font-family: sans-serif;
+    }
+
+    #privacy-banner button {
+      background-color: #27ae60;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #privacy-banner a {
+      color: #1abc9c;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to FreshGrocer!</h1>
+
+  <div id="privacy-banner">
+    🍪 We use cookies and store data to improve your shopping experience. 
+    <a href="/privacy-policy.html" target="_blank">Learn more</a>
+    <button id="accept-privacy">Accept</button>
+  </div>
+
+  <script>
+    // Check if consent already exists
+    window.addEventListener('DOMContentLoaded', () => {
+      const consent = localStorage.getItem('privacyConsent');
+      if (!consent) {
+        document.getElementById('privacy-banner').style.display = 'block';
+      }
+    });
+
+    // When user accepts
+    document.getElementById('accept-privacy').addEventListener('click', () => {
+      localStorage.setItem('privacyConsent', 'true');
+      document.getElementById('privacy-banner').style.display = 'none';
+    });
+  </script>
+</body>
+</html>

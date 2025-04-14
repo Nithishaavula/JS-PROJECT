@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FreshGrocer - Secure Checkout</title>
+</head>
+<body>
+  <h1>🛒 FreshGrocer - Secure Order</h1>
+
+  <input type="text" id="itemName" placeholder="Item name" />
+  <input type="number" id="price" placeholder="Price" />
+  <input type="file" id="upiScreenshot" accept="image/*" />
+  <button id="submitOrder">Submit Order</button>
+
+  <p id="status"></p>
+
+  <!-- Firebase SDK Modules -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    // TODO: Replace with your Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUser = null;
+
+    // Anonymous login
+    signInAnonymously(auth)
+      .then(() => console.log("✅ Signed in anonymously"))
+      .catch((error) => console.error("Auth Error:", error));
+
+    // Set current user
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+      }
+    });
+
+    // Submit order
+    document.getElementById("submitOrder").addEventListener("click", async () => {
+      const itemName = document.getElementById("itemName").value.trim();
+      const price = parseFloat(document.getElementById("price").value);
+      const file = document.getElementById("upiScreenshot").files[0];
+      const status = document.getElementById("status");
+
+      if (!itemName || !price || !file || !currentUser) {
+        status.textContent = "❗ Please fill all fields correctly.";
+        return;
+      }
+
+      try {
+        const filePath = `payment_proofs/${currentUser.uid}/${file.name}`;
+        const fileRef = ref(storage, filePath);
+        await uploadBytes(fileRef, file);
+        const proofURL = await getDownloadURL(fileRef);
+
+        await addDoc(collection(db, "orders"), {
+          userId: currentUser.uid,
+          item: itemName,
+          price: price,
+          proofURL: proofURL,
+          createdAt: new Date()
+        });
+
+        status.textContent = "✅ Order submitted successfully!";
+      } catch (error) {
+        console.error("Upload/Order Error:", error);
+        status.textContent = "❌ Something went wrong!";
+      }
+    });
+  </script>
+</body>
+</html>
+

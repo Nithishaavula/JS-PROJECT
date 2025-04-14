@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Groceries Notifications</title>
+</head>
+<body>
+  <h1>Welcome to FreshGrocer!</h1>
+  <button id="notifyBtn">🔔 Notify Me About Deals</button>
+
+  <script>
+    // Ask for notification permission on load
+    document.addEventListener("DOMContentLoaded", () => {
+      if ('Notifications' in window) {
+        Notifications.requestPermission().then(permission => {
+          console.log("Notification permission:", permission);
+        });
+      }
+    });
+    // Function to send notification
+    function Notificationg() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support notifications.");
+        return;
+      }
+
+      if (Notification.permission === "granted") {
+        const notification = new Notification("🛒 FreshGrocer Deal!", {
+          body: "🥦 Avocados now 50% OFF! Limited time deal.",
+          icon: "https://cdn-icons-png.flaticon.com/512/2909/2909769.png"
+        });
+      } else if (Notification.permission !== "denied") {
+        Notifications.requestPermission().then(permission => {
+          if (permission === "granted") {
+            Notificationg(); // Try again
+          }
+        });
+      } else {
+        alert("Please enable notifications in your browser settings.");
+      }
+    }
+
+    // Add button click listener
+    document.getElementById("notifyBtn").addEventListener("click", () => {
+      Notificationg();
+    });
+  </script>
+</body>
+</html>
+

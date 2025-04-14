@@ -105,6 +105,65 @@
             border: 1px solid orange;
             margin: 10px ;
         }
+        .your-information button:hover {
+            background-color: orange;
+            color: white;
+        }
+        .your-information button:focus {
+            outline: none;
+            box-shadow: 0 0 5px orange;
+        }
+        .your-information button:active {
+            background-color: darkorange;
+        }
+        .your-information button:disabled {
+            background-color: lightgray;
+            color: gray;
+            cursor: not-allowed;
+        }
+        .your-information button:disabled:hover {
+            background-color: lightgray;
+            color: gray;
+        }
+        .your-information button:disabled:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .your-information button:disabled:active {
+            background-color: lightgray;
+        }
+        .your-information button:disabled:active:hover {
+            background-color: lightgray;
+        }
+        #supportModal {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background-color: white;
+            padding: 20px;
+            border: 2px solid #ccc;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            width: 300px;
+            border-radius: 8px;
+          }
+      
+          #supportModal button {
+            margin-top: 10px;
+          }
+      
+          #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+          }
     </style>
 </head>
 <body>
@@ -119,13 +178,13 @@
     <!-- orders -->
  <div id="orders">
         <div>
-    <button class="order" id="profile" onclick='order()'>
+    <button id="mainOrder" class="order" id="profile">
         <i class="fa-solid fa-suitcase"></i>
         Your Orders
     </button >
          </div>
     <div >
-        <button class="order">
+        <button class="order" id="helpBtn">
             <i class="fa-brands fa-hire-a-helper"></i>
             Help and Support
         </button>
@@ -137,11 +196,11 @@
     
 
     <div>
-        <button>Your Orders<i class="fa-solid fa-suitcase"></i></button>
+        <button id="button">Your Orders<i class="fa-solid fa-suitcase"></i></button>
     </div>
     <hr>
     <div>
-        <button>Your Address<i class="fa-solid fa-location-dot"></i></button>
+        <button id="address">Your Address<i class="fa-solid fa-location-dot"></i></button>
     </div>
     <hr>
     <div>
@@ -149,24 +208,36 @@
     </div>
     <hr>
     <div>
-        <button>Your Notifications<i class="fa-solid fa-bell"></i></button>
+        <button id="notify">Your Notifications<i class="fa-solid fa-bell"></i></button>
         </div>
         <hr>
     <div>
-        <button>Your Privacy<i class="fa-solid fa-shield"></i></button>
+        <button id="privacy">Your Privacy<i class="fa-solid fa-shield"></i></button>
     </div>
     <hr>
     <div>
-        <button>Your Security<i class="fa-solid fa-lock"></i></button>
+        <button id="security">Your Security<i class="fa-solid fa-lock"></i></button>
     </div>
     <hr>
     <div>
         <button>Rewards<i class="fa-solid fa-gift"></i></button>
     </div>
 </div>
+
     <button class="logout" id="logout">
         logout
        </button>
+    <!-- help and support -->
+
+
+    <div id="overlay"></div>
+  
+    <div id="supportModal">
+      <h3>Need Help?</h3>
+      <p>Contact us at: <br><strong>support@groceries.com</strong></p>
+      <p>Or call: <strong>+91-9876543210</strong></p>
+      <button id="closeSupport">Close</button>
+    </div>
         <script type="module">
  //script will write here
         import { initializeApp } 
@@ -206,6 +277,140 @@
                     }
                  });
             });
+       let ordersbtn=document.getElementById('button')
+         ordersbtn.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("orders.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
+          let mainOrder=document.getElementById('mainOrder')
+          mainOrder.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("orders.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
+//help and support
+const helpBtn = document.getElementById("helpBtn");
+const supportModal = document.getElementById("supportModal");
+const closeSupport = document.getElementById("closeSupport");
+const overlay = document.getElementById("overlay");
+
+helpBtn.addEventListener("click", () => {
+  supportModal.style.display = "block";
+  overlay.style.display = "block";
+});
+
+closeSupport.addEventListener("click", () => {
+  supportModal.style.display = "none";
+  overlay.style.display = "none";
+});
+
+overlay.addEventListener("click", () => {
+  supportModal.style.display = "none";
+  overlay.style.display = "none";
+});
+let address=document.getElementById('address')
+address.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("address.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
+        let notify=document.getElementById('notify')
+        notify.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("notification.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
+        let privacy=document.getElementById('privacy')
+        privacy.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("privacy.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
+                let security=document.getElementById('security')
+        security.addEventListener('click', function(e) 
+                {
+                 // Redirect to the login page
+                 e.preventDefault();
+                  // Prevent default button behavior
+                //  auth.signOut();
+                //  console.log("logout")
+                 // auth.onAuthStateChanged(user=> {
+                    //  if (user) {
+                            // User is signed in, redirect to the main page
+                           // console.log(user.email +"is signed in!")
+                            window.open("security.html","_self")
+                    //  } else {
+                            // User is signed out, redirect to the login page
+                     //       window.location.replace("index.html");
+                     // }
+                 // });
+                });
         </script>
 </body>
 </html>
