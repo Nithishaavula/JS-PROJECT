@@ -133,86 +133,7 @@
       to { transform: translateX(-100%); }
     }
  /* Responsive Styling */
- @media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav-left,
-  .nav-right {
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-    margin: 5px 0;
-  }
-
-  .navbar button, .profile-btn {
-    width: 80%;
-  }
-
-  #search {
-    width: 80%;
-    margin-top: 10px;
-  }
-
-  #cards > div {
-    width: 90%;
-  }
-
-  .floating-cart {
-    bottom: 10px;
-    right: 10px;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 1024px) {
-  .navbar {
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .nav-left,
-  .nav-right {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .navbar button, .profile-btn {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.95rem;
-  }
-
-  #search {
-    width: 50%;
-    margin-top: 10px;
-  }
-
-  #cards > div {
-    width: 40%;
-  }
-}
-
-@media (min-width: 1025px) {
-  .navbar {
-    flex-direction: row;
-  }
-
-  .nav-left,
-  .nav-right {
-    flex-direction: row;
-  }
-
-  #cards > div {
-    width: 200px;
-  }
-
-  #search {
-    width: 250px;
-  }
-}
-  
+ 
   </style>
 </head>
 <body>
@@ -355,8 +276,72 @@
           cartitems.push(item);
           localStorage.setItem("cart", JSON.stringify(cartitems));
           alert(`${item.name} added to cart`);
+          let addToCartBtn = document.createElement("button");
+        addToCartBtn.innerHTML = "Add to Cart";
+        addToCartBtn.style.backgroundColor = "black";
+        addToCartBtn.style.color = "white";
+        addToCartBtn.style.border = "none";
+        addToCartBtn.style.cursor = "pointer";
+        addToCartBtn.style.padding = "1rem";
+        addToCartBtn.style.borderRadius = "10px";
+        addToCartBtn.style.boxShadow = "0px 0px 5px 10px whiteSmoke";
+        addToCartBtn.style.marginTop = "1rem";
+        addToCartBtn.style.width = "100%";
+          let quantityDiv = document.createElement("div");
+          quantityDiv.style.display = "none";
+          quantityDiv.style.alignItems = "center";
+          quantityDiv.style.justifyContent = "center";
+          quantityDiv.style.gap = "10px";
+  
+          let minusBtn = document.createElement("button");
+          minusBtn.innerHTML = "➖";
+          minusBtn.style.padding = "0.5rem";
+          minusBtn.style.fontSize = "18px";
+  
+          let qtyDisplay = document.createElement("span");
+          qtyDisplay.innerText = "1";
+  
+          let plusBtn = document.createElement("button");
+          plusBtn.innerHTML = "➕";
+          plusBtn.style.padding = "0.5rem";
+          plusBtn.style.fontSize = "18px";
+        //  let addToCartBtn = document.createElement("button");
+          addToCartBtn.addEventListener("click", () => {
+            item.qty = 1;
+            cartitems.push(item);
+            localStorage.setItem("cart", JSON.stringify(cartitems));
+            addToCartBtn.style.display = "none";
+            quantityDiv.style.display = "flex";
+            card.style.animation = "pop 0.3s ease";
+            setTimeout(() => card.style.animation = "", 300);
+          });
+  
+          plusBtn.addEventListener("click", () => {
+            let found = cartitems.find(i => i.name === item.name);
+            if (found) {
+              found.qty += 1;
+              qtyDisplay.innerText = found.qty;
+              localStorage.setItem("cart", JSON.stringify(cartitems));
+            }
+          });
+  
+          minusBtn.addEventListener("click", () => {
+            let foundIndex = cartitems.findIndex(i => i.name === item.name);
+            if (foundIndex !== -1) {
+              cartitems[foundIndex].qty -= 1;
+              if (cartitems[foundIndex].qty <= 0) {
+                cartitems.splice(foundIndex, 1);
+                quantityDiv.style.display = "none";
+                addToCartBtn.style.display = "block";
+              } else {
+                qtyDisplay.innerText = cartitems[foundIndex].qty;
+              }
+              localStorage.setItem("cart", JSON.stringify(cartitems));
+            }
+          });
+      
+          quantityDiv.append(minusBtn, qtyDisplay, plusBtn);
         });
-
         card.append(img, name, weight, price, button);
         cards.appendChild(card);
       });
@@ -365,7 +350,7 @@
       cards.style.flexWrap = "wrap";
       cards.style.justifyContent = "space-around";
     }
-
+  
     // Render initial fruits
     renderItems(fruitsData);
 
