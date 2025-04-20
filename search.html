@@ -7,7 +7,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="icon" href="favicon.png" type="instant/png">
+  <link rel="icon" href="instant.png" type="image/png">
   <style>
     * {
       margin: 0;
@@ -330,70 +330,25 @@
         <p><b>${item.name}</b></p>
         <p>${item.weight}</p>
         <p><i class="fa-solid fa-indian-rupee-sign"></i> ${item.price}</p>
-        <button class="add-btn">Add to Cart</button>
+        <button class="add-btn" onclick="addToCart('${item.name}', '${item.img}', '${item.price}')">Add to Cart</button>
       `;
-      const btn = card.querySelector("button");
-
-      const isInCart = cart.some(c => c.name === item.name && c.weight === item.weight);
-      if (isInCart) {
-        btn.innerHTML = "✔️ Added";
-        btn.style.backgroundColor = "green";
-      }
-
-      btn.addEventListener("click", () => {
-        const itemIndex = cart.findIndex(c => c.name === item.name && c.weight === item.weight);
-        if (itemIndex === -1) {
-          cart.push(item);
-          localStorage.setItem("cart", JSON.stringify(cart));
-          updateCartCount();
-
-          db.collection("cart").add(item).then(() => console.log("Item added to Firestore"));
-
-          btn.innerHTML = "✔️ Added";
-          btn.style.backgroundColor = "green";
-          setTimeout(() => {
-            btn.innerHTML = "Add to Cart";
-            btn.style.backgroundColor = "black";
-          }, 1500);
-        } else {
-          cart.splice(itemIndex, 1);
-          localStorage.setItem("cart", JSON.stringify(cart));
-          updateCartCount();
-
-          // Remove from Firestore as well
-          db.collection("cart").where("name", "==", item.name)
-            .where("weight", "==", item.weight)
-            .get().then(snapshot => {
-              snapshot.forEach(doc => {
-                doc.ref.delete().then(() => console.log("Item removed from Firestore"));
-              });
-            });
-
-          btn.innerHTML = "Removed";
-          btn.style.backgroundColor = "gray";
-          setTimeout(() => {
-            btn.innerHTML = "Add to Cart";
-            btn.style.backgroundColor = "black";
-          }, 1500);
-        }
-      });
-
       cards.appendChild(card);
     });
   }
 
-  document.getElementById("search").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const filtered = allData.filter(item => item.name.toLowerCase().includes(query));
-    renderItems(filtered);
-  });
+  function addToCart(name, img, price) {
+    cart.push({ name, img, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+  }
 
-  renderItems(allData);
   updateCartCount();
-</script>
+  renderItems(allData);
 
+</script>
 </body>
 </html>
+
 
 
 
