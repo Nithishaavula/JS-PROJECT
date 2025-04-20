@@ -319,6 +319,7 @@
   function updateCartCount() {
     document.getElementById("cartCount").textContent = cart.length;
   }
+
   function renderItems(data) {
     const cards = document.getElementById("cards");
     cards.innerHTML = "";
@@ -332,28 +333,49 @@
         <button class="add-btn">Add to Cart</button>
       `;
       const btn = card.querySelector("button");
-      btn.addEventListener("click", () => {
-        if (!cart.find(c => c.name === item.name && c.weight === item.weight)) {
-        cart.push(item);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        updateCartCount();
 
-        db.collection("cart").add(item).then(() => console.log("Item added to Firestore"));
-
+      const isInCart = cart.some(c => c.name === item.name && c.weight === item.weight);
+      if (isInCart) {
         btn.innerHTML = "✔️ Added";
         btn.style.backgroundColor = "green";
-        setTimeout(() => {
-          btn.innerHTML = "Add to Cart";
-          btn.style.backgroundColor = "black";
-        }, 1500);
-      }else{
-        btn.innerHTML = "Already in Cart";
-        btn.style.backgroundColor = "gray";
-        setTimeout(() => {
-          btn.innerHTML = "Add to Cart";
-          btn.style.backgroundColor = "black";
-        }, 1500);
       }
+
+      btn.addEventListener("click", () => {
+        const itemIndex = cart.findIndex(c => c.name === item.name && c.weight === item.weight);
+        if (itemIndex === -1) {
+          cart.push(item);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+
+          db.collection("cart").add(item).then(() => console.log("Item added to Firestore"));
+
+          btn.innerHTML = "✔️ Added";
+          btn.style.backgroundColor = "green";
+          setTimeout(() => {
+            btn.innerHTML = "Add to Cart";
+            btn.style.backgroundColor = "black";
+          }, 1500);
+        } else {
+          cart.splice(itemIndex, 1);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+
+          // Remove from Firestore as well
+          db.collection("cart").where("name", "==", item.name)
+            .where("weight", "==", item.weight)
+            .get().then(snapshot => {
+              snapshot.forEach(doc => {
+                doc.ref.delete().then(() => console.log("Item removed from Firestore"));
+              });
+            });
+
+          btn.innerHTML = "Removed";
+          btn.style.backgroundColor = "gray";
+          setTimeout(() => {
+            btn.innerHTML = "Add to Cart";
+            btn.style.backgroundColor = "black";
+          }, 1500);
+        }
       });
 
       cards.appendChild(card);
@@ -372,7 +394,6 @@
 
 </body>
 </html>
-
 
 
 
