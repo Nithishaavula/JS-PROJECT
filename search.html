@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E-Commerce Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      background: #f8f8f8;
+    }
+
+    .marquee {
+      background: orange;
+      color: white;
+      padding: 0.5rem;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: marquee 15s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      background: black;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      z-index: 999;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .navbar button, .profile-btn {
+      background: white;
+      color: black;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .navbar button:hover, .profile-btn:hover {
+      background: #f1f1f1;
+    }
+
+    #search {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    #cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #cards > div {
+      width: 200px;
+      background: white;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px 5px whitesmoke;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #cards > div:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 0px 10px 5px black;
+    }
+
+    .add-btn {
+      background: black;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: white;
+      color: black;
+      border: 1px solid black;
+    }
+
+    .floating-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: black;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .floating-cart span {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: red;
+      color: white;
+      font-size: 14px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #cards > div {
+        width: 90%;
+      }
+
+      .floating-cart {
+        bottom: 10px;
+        right: 10px;
+      }
+
+      #search {
+        width: 80%;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="marquee">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</div>
+
+<div class="navbar">
+  <div class="nav-left">
+    <button onclick="renderItems(allData)">All</button>
+    <button onclick="renderItems(fruitsData)">Fruits</button>
+    <button onclick="renderItems(vegetablesData)">Vegetables</button>
+    <button onclick="renderItems(groceriesData)">Groceries</button>
+  </div>
+  <input type="text" id="search" placeholder="Search Products...">
+  <div class="nav-right">
+    <button class="profile-btn" onclick="window.location.href='profile.html'">👤 Profile</button>
+  </div>
+</div>
+
+<div id="cards"></div>
+
+<div class="floating-cart" onclick="window.location.href='page4.html'">
+  <i class="fa-solid fa-cart-shopping"></i>
+  <span id="cartCount">0</span>
+</div>
+
+<script>
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Dummy Product Data
+  const fruitsData = [
+    { name: "Apple", img: "apple.jpeg", weight: "500gm", price: "50" },
+    { name: "Banana", img: "banana.jpeg", weight: "1kg", price: "40" },
+    { name:"Blueberry", img:"blueberry.jpeg",weight:"1kg",price:"80"},
+    { name:"Grapes", img:"grapes.jpg",weight:"1kg",price:"80"},
+    { name: "Apple", img: "apple.jpeg", weight: "500gm", price: "50" },
+    { name: "Banana", img: "banana.jpeg", weight: "1kg", price: "40" },
+    { name: "Mango", img: "mango.jpeg", weight: "2kg", price: "60" },
+    { name: "Grapes", img: "grapes.jpg", weight: "1kg", price: "70" },
+    { name: "Orange", img: "orange.jpeg", weight: "1kg", price: "80" },
+    { name: "Pineapple", img: "pineapple.jpeg", weight: "1kg", price: "90" },
+    { name: "Strawberry", img: "strawberry.jpeg", weight: "500gm", price: "100" },
+    { name: "Blueberry", img: "blueberry.jpeg", weight: "1kg", price: "110" },
+    { name: "Watermelon", img: "water.jpeg", weight: "1kg", price: "120" },
+    { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "130" },
+    { name: "Kiwi", img: "kiwi.jpeg", weight: "500gm", price: "140" },
+    { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" }
+
+  ];
+  const vegetablesData = [
+    { name: "Carrot", img: "carrot.jpeg", weight: "1kg", price: "80" },
+    { name: "Onion", img: "onion.jpeg", weight: "1kg", price: "50" },
+    { name: "Potato", img: "potato.webp", weight: "2kg", price: "40" },
+    { name: "Cabbage", img: "cabbage.jpeg", weight: "Dozen", price: "60" },
+    { name: "Cucumber", img: "cucumber.jpeg", weight: "1piece", price: "70" },
+    { name: "Carrot", img: "carrot.jpeg", weight: "1.5kg", price: "80" },
+    { name: "Ladies finger", img: "Ladies.webp", weight: "5Litres", price: "90" },
+    { name: "Spinach", img: "spinach.jpeg", weight: "1/2 litre", price: "100" },
+    { name: "Tomato", img: "tomato.jpeg", weight: "1 kg Rice", price: "110" },
+    { name: "Cauliflower", img: "cauliflower.jpeg", weight: "1 Litre", price: "120" },
+    { name: "Broccoli", img: "broccoli.jpeg", weight: "Tray(30Pieces)", price: "130" },
+    { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "140" },
+    { name: "Zucchini", img: "zucchini.webp", weight: "1kg", price: "150" }
+  ];
+  const groceriesData = [
+    { name: "Milk", img: "milk.jpeg", weight: "1L", price: "60" },
+    { name: "Rice", img: "rice.jpeg", weight: "1kg", price: "60" },
+    {name:"thumsup",img:"thumsup.jpeg",weight:"1 litre",price:"50"},
+    {name:"Milk",img:"milk.jpeg",weight:"1/2 litre",price:"30"},
+    {name:"meat(chicken)",img:"meat.jpeg",weight:"1 kg",price:"250"},
+    {name:"Rice",img:"rice.jpeg",weight:"1 kg",price:"50"},
+    {name:"Redchilli",img:"redchilli.jpeg",weight:"1/2 kg",price:"60"},
+    {name:"Indian(Basmathi Rice)",img:"indian.jpeg",weight:"1 kg",price:"110"},
+    {name:"Freedom Oil",img:"freedom.jpeg",weight:"5litres",price:"800"},
+    {name:"Eggs",img:"eggs.jpeg",weight:"30 Pieces",price:"230"},
+    {name:"Eggplant",img:"eggplant.jpeg",weight:"1",price:"200"},
+    {name:"Dryfruits",img:"dryfruits.jpeg",weight:"2 kg",price:"400"},
+    {name:"(Dal)KandiPappu",img:"dal.jpeg",weight:"1 kg",price:"60"},
+    {name:"Curd",img:"curd.jpeg",weight:"1/2 kg",price:"50"},
+    {name:"Ashirvad",img:"ashirvad.jpeg",weight:"1 kg",price:"100"},
+    {name:"Eggs",img:"eggs.jpeg",weight:"10pieces",price:"84"}
+  ];
+
+  const allData = [...fruitsData, ...vegetablesData, ...groceriesData];
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  function updateCartCount() {
+    document.getElementById("cartCount").textContent = cart.length;
+  }
+
+  function renderItems(data) {
+    const cards = document.getElementById("cards");
+    cards.innerHTML = "";
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.innerHTML = `
+        <img src="${item.img}" style="width:100px;height:100px;">
+        <p><b>${item.name}</b></p>
+        <p>${item.weight}</p>
+        <p><i class="fa-solid fa-indian-rupee-sign"></i> ${item.price}</p>
+        <button class="add-btn">Add to Cart</button>
+      `;
+      const btn = card.querySelector("button");
+      btn.addEventListener("click", () => {
+        cart.push(item);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+
+        // Firebase Upload
+        db.collection("cart").add(item).then(() => console.log("Item added to Firestore"));
+
+        // Button Animation
+        btn.innerHTML = "✔️ Added";
+        btn.style.backgroundColor = "green";
+        setTimeout(() => {
+          btn.innerHTML = "Add to Cart";
+          btn.style.backgroundColor = "black";
+        }, 1500);
+      });
+
+      cards.appendChild(card);
+    });
+  }
+
+  // Search Functionality
+  document.getElementById("search").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const filtered = allData.filter(item => item.name.toLowerCase().includes(query));
+    renderItems(filtered);
+  });
+
+  // Initialize
+  renderItems(allData);
+  updateCartCount();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+

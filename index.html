@@ -30,13 +30,54 @@
       height:100vh;
       background: url('background.jpg') repeat;
       background-size: cover;
-      animation: panImage 100s linear infinite;
       filter: brightness(0.65) blur(0px);
     }
 
     @keyframes panImage {
       0% { transform: translate(0, 0); }
       100% { transform: translate(-50%, -50%); }
+    }
+
+    /* Floating Images Animation */
+    .floating-img {
+      position: absolute;
+      width: 100px;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .img1 {
+      top: 60%;
+      left: 0%;
+      animation: float1 45s linear infinite;
+    }
+
+    .img2 {
+      top: 40%;
+      left: 70%;
+      animation: float2 50s ease-in-out infinite;
+    }
+
+    .img3 {
+      top: 70%;
+      left: 10%;
+      animation: float3 50s linear infinite;
+    }
+
+    @keyframes float1 {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(300px, -300px) rotate(360deg); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-50px); }
+    }
+
+    @keyframes float3 {
+      0%   { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
     }
 
     nav {
@@ -81,28 +122,35 @@
       background: white;
       color: black;
       border: none;
-      padding: 6px 14px;
+      padding: 16px 32px;
       border-radius: 20px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
+      margin-left: 20px;
     }
 
     .nav-btn:hover {
       background:black;
       color: white;
+      border:3px solid white;
     }
 
     .nav-btn.secondary {
       background: transparent;
       color: white;
-      border: 1px solid white;
+      border: 3px ridge white;
+      padding:16px 32px;
+
+
     }
 
     .nav-btn.secondary:hover {
       background: white;
       color:black;
-
+      border:none;
+      font-size: 30px;
+      padding:10px;
     }
 
     header {
@@ -233,7 +281,11 @@
 <body>
 
   <!-- Animated Background -->
-  <div class="background"></div>
+  <div class="background">
+    <img src="background.jpg" class="floating-img img1" />
+    <img src="strawberry.jpeg" class="floating-img img2" />
+    <img src="water.jpeg" class="floating-img img3" />
+  </div>
 
   <!-- Navbar -->
   <nav>
@@ -285,7 +337,7 @@
     <p class="testimonial">“No more standing in line. FreshGro is a game-changer.” – Arjun</p>
   </section>
 
-  <!-- New Mission Section -->
+  <!-- Mission Section -->
   <section class="mission-section">
     <h2>Our Mission 🌱</h2>
     <p>Instant Groceries is committed to building a sustainable future by connecting communities with local farmers. Every product you order supports a greener, healthier lifestyle.</p>
@@ -317,8 +369,7 @@
         const lon = pos.coords.longitude;
 
         try {
-          const response = await fetch(`  https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=55cd3fb97aea49b5b07e2b170151c499&language=en&pretty=1`);
-        
+          const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=55cd3fb97aea49b5b07e2b170151c499&language=en&pretty=1`);
           const data = await response.json();
 
           if (data && data.results && data.results.length > 0) {
@@ -340,27 +391,22 @@
         console.error("Geolocation error:", error);
       });
     }
-    let login=document.getElementById("login");
-    login.addEventListener("click",function(){
+
+    document.getElementById("login").addEventListener("click", function(){
       window.location.href="login.html";
-    })
-    let signup=document.getElementById("signup");
-    signup.addEventListener("click",function(){
+    });
+
+    document.getElementById("signup").addEventListener("click", function(){
       window.location.href="signup.html";
-    })
-    let locationText=document.getElementById("location-text");
-    locationText.addEventListener("click",function(){
+    });
+
+    document.getElementById("location-text").addEventListener("click", function(){
       getLocation();
-    })
-    // Initialize Firebase
-    // Import the functions you need from the SDKs you need
-    // import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    // import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-    // import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
-    // import { getStorage } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+    });
   </script>
 </body>
 </html>
+
 
 
 

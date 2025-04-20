@@ -16,8 +16,8 @@
             background-color: orange;
             width:100vw;
             height:100vh;
-            background-color: black;
-            color:white;
+            background-color:white;
+            color:black !important;
         }
         h1 {
             color: #4CAF50;
@@ -85,6 +85,9 @@
         }
         .header div i{
             font-size: 2rem;
+            color:white;
+            padding:16px 32px;
+
         }
         .header button {
             background-color:black;
@@ -154,6 +157,15 @@
             flex-wrap:wrap;
             width:100vw;
         }
+        .btns :hover{
+            background-color:white;
+            border:3px solid black;
+        }
+        .btns i:hover{
+            color: black;
+        }
+     
+      
     </style>
 </head>
 <body>
@@ -165,26 +177,26 @@
     <div class="two">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass" id="search"></i>
-        <input type="search" >
+        <input type="text" id="searchbar" placeholder="Search here..." oninput="searchItems()">
         </div>
         
     </div>
     <div class="header">
-        <div id="all">
-             <button onclick="all()" id="btn1"><i class="fa-solid fa-suitcase"></i></button>
+        <div id="all" class="btns">
+             <button onclick="all()" id="btn1" ><i class="fa-solid fa-suitcase"></i></button>
              <p>All</p>
              
         </div>
-        <div id="f">
-            <button><i class="fa-solid fa-apple-whole"></i></button>
+        <div id="f" class="btns">
+            <button ><i class="fa-solid fa-apple-whole"></i></button>
             <p>Fruits</p>
         </div>
-        <div id="v">
-            <button><i class="fa-solid fa-pepper-hot"></i></button>
+        <div id="v" class="btns">
+            <button ><i class="fa-solid fa-pepper-hot"></i></button>
             <p>Vegetables</p>
      </div>
-        <div id="g">
-                <button><i class="fa-solid fa-basket-shopping"></i></button>
+        <div id="g" class="btns">
+                <button class="btns"><i class="fa-solid fa-basket-shopping"></i></button>
                 <p>Groceries</p>
          </div>       
 </div>
@@ -246,13 +258,14 @@
  //cartstart here  
  let cartitems=JSON.parse(localStorage.getItem("cart"))||[] 
           let cart=document.getElementById('cart');
-          cart.style.backgroundColor="black"
-          cart.style.color="white"
+          cart.style.backgroundColor="white"
+          cart.style.color="black"
+//products data
           let imgs=["onion.jpeg","potato.webp","banana.jpeg","water.jpeg","carrot.jpeg","freedom.jpeg","milk.jpeg","indian.jpeg","thumsup.jpeg","eggs.jpeg","dal.jpeg","ashirvad.jpeg"]
           let names=["onion","Potato","banana","WaterMelon","Carrot","Freedom Refined Sunflower Oil","Heritage Toned Fresh MIlk(Pouch)","IndianGate Rice","thumsUp","Eggs","ToorDal","Aashirvaad Atta"]
            let weight=["1kg","2kg","Dozen","1piece","1.5kg","5Litres","1/2 litre","1 kg Rice","1 Litre","Tray(30Pieces)","1kg","1kg"]
            let ratings=["27","34","64","47","34","783","29","100","50","207","167","65"]
-         //  let i=0;
+//create and display products dynamically
           for(let i=0;i<=11;i++){
          let parent=document.createElement("div")
             parent.style.boxShadow="0px 0px 5px 10px whiteSmoke"
@@ -329,13 +342,17 @@
              alert(`${item.name} added to cart`)  
              
       });
+      parent.append(img,name,kg,rating,addtocart)
+      cart.append(parent)
+}
+  //search bar
+ 
+
  //add to cart functionality ends here
-           parent.append(img,name,kg,rating,addtocart)
-           cart.append(parent)
- }
+
  let cards=document.getElementById('cards')
- cards.style.backgroundColor="black"
- cards.style.color="white"
+ cards.style.backgroundColor="white"
+ cards.style.color="black"
  cards.style.height="60vh"
  cards.style.width="100vw"
     cards.style.position="absolute"
@@ -373,7 +390,7 @@
                // Redirect to the login page
               // Redirect to profile.html
               cart=document.getElementById('cart');
-                cart.style.height="auto"
+               cart.style.height="auto"
                 cart.style.overflow="auto"
                 cart.style.position="absolute"
                 cart.style.color="black"
@@ -411,9 +428,10 @@
 //fruits cart starts here
                let fruits=document.getElementById('fruits');
               
-               fruits.style.background="black"
-               fruits.style.width="85vw"
-             fruits.style.padding="1rem"
+             fruits.style.background="white"
+              fruits.style.color="black"
+             fruits.style.width="85vw"
+            fruits.style.padding="1rem"
 //let cart2=[]
              let fruits1=["apple.jpeg","banana.jpeg","mango.jpeg","grapes.jpg","orange.jpeg","pineapple.jpeg","strawberry.jpeg","blueberry.jpeg","water.jpeg","papaya.jpeg","kiwi.jpeg","peach.jpeg"]
                 let fruit=["Apple","Banana","Mango","Grapes","Orange","Pineapple","Strawberry","Blueberry","Watermelon","Papaya","Kiwi","Peach"]
@@ -429,15 +447,14 @@
                     parent1.style.padding="1rem"
                     parent1.style.width="200px"
                     parent1.style.borderRadius="10px"
-                    parent1.style.background="black"
-                    parent1.style.color="white"
+                    parent1.style.background="white"
+                    parent1.style.color="black"
                     parent1.style.margin="1rem"
                     parent1.style.border="2px solid white"
                     parent1.style.height="auto"
                     parent1.style.textAlign="center"
                     parent1.style.display="grid"
                     parent1.style.gap="1rem"
-                    parent1.style.color="white"
                     parent1.setAttribute("id","fruits")
                   //  console.log(parent1)
 
@@ -452,6 +469,7 @@
                     kg1.innerHTML=ratings1[i]
                     rating1.setAttribute("class","fa-solid fa-indian-rupee-sign")
                     rating1.innerHTML=ratings[i];
+                    rating1.style.color="black";
                     addtocart1.innerHTML="Add to Cart"
                     addtocart1.setAttribute("id","addtocart")
                     addtocart1.style.backgroundColor="black"
@@ -523,8 +541,8 @@
                    fruits.style.width="90vw"
                    fruits.style.height="auto"
                    fruits.style.overflow="auto"
-                   fruits.style.backgroundColor="black"
-                   fruits.style.color="white"
+                   fruits.style.backgroundColor="white"
+                   fruits.style.color="black"
                    fruits.style.position="absolute"
                    fruits.style.top="0%"
                    fruits.style.left="5%"
@@ -564,7 +582,8 @@
                 let vegetables=document.getElementById('vegetables');
               //  vegetables.style.visibility="hidden"
               //  vegetables.style.width="85vw"
-                vegetables.style.background="black"
+                vegetables.style.background="white"
+                vegetables.style.color="black"
                 vegetables.style.padding="1rem"
                 let cart2=[]
             
@@ -572,7 +591,6 @@
                 let vegetables1=["onion.jpeg","potato.webp","cabbage.jpeg","cucumber.jpeg","carrot.jpeg","Ladies.webp","spinach.jpeg","tomato.jpeg","cauliflower.jpeg","broccoli.jpeg","papaya.jpeg","zucchini.webp"]
                 let vegetable=["Onion","Potato","cabbage","cucumber","carrot","Ladies finger","Spinach)","Tomato","cauliflower","Broccolli","papaya","Zucchini"]
                 let weight2 =["1kg","2kg","Dozen","1piece","1.5kg","5Litres","1/2 litre","1 kg Rice","1 Litre","Tray(30Pieces)","1kg","1kg"]
-                //
               //  vegetables.style.width="85vw"
                console.log(vegetables1)
                 for(let i=0;i<=11;i++){
@@ -581,7 +599,8 @@
                     parent2.style.padding="1rem"
                     parent2.style.width="150px"
                     parent2.style.borderRadius="10px"
-                    parent2.style.background="black"
+                    parent2.style.background="white"
+                    parent2.style.color="black"
                     parent2.style.margin="1rem"
                     parent2.style.height="auto"
                     parent2.style.textAlign="center"
@@ -603,9 +622,12 @@
                     img2.setAttribute("src",vegetables1[i])
                     img2.style.height="100px"
                     name2.innerHTML=vegetable[i]
+                    name2.style.color="black"
                     kg2.innerHTML=ratings1[i]
+                    kg2.style.color="black"
                     rating2.setAttribute("class","fa-solid fa-indian-rupee-sign")
                     rating2.innerHTML=ratings[i];
+                    rating2.style.color="black"
                     addtocart2.innerHTML="Add to Cart"
                     addtocart2.setAttribute("id","addtocart")
                     addtocart2.style.backgroundColor="black"
@@ -680,7 +702,8 @@ addtocart2.addEventListener('mouseover', function() {
                    vegetables.style.width="90vw"
                    vegetables.style.height="auto"
                    vegetables.style.overflow="auto"
-                   vegetables.style.backgroundColor="black"
+                   vegetables.style.backgroundColor="white"
+                   vegetables.style.color="black"
                    vegetables.style.position="absolute"
                    vegetables.style.top="0%"
                    vegetables.style.left="5%"
@@ -719,7 +742,7 @@ addtocart2.addEventListener('mouseover', function() {
                 });
  //groceries
                 let groceries=document.getElementById('groceries');
-                groceries.style.background="black"
+                groceries.style.backgroundColor="white"
 //creation of arrays
                 let groceries1=["thumsup.jpeg","milk.jpeg","freedom.jpeg","indian.jpeg","curd.jpeg","dryfruits.jpeg","dal.jpeg","ashirvad.jpeg","dal.jpeg","rice.jpeg","redchilli.jpeg","meat.jpeg"]
                 let grocery=["Thumsup","Milk","Freedom Oil","Basmathi Rice","Curd","dryfruits","kandi pappu","ashirvad","Toor dall","Kurnool Rice","Redchilli Powder","Meat"]
@@ -731,8 +754,8 @@ addtocart2.addEventListener('mouseover', function() {
                     parent3.style.padding="2rem"
                     parent3.style.width="200px"
                     parent3.style.borderRadius="10px"
-                    parent3.style.background="black"
-                    parent3.style.color="white"
+                    parent3.style.background="white"
+                    parent3.style.color="black"
                     parent3.style.margin="1rem"
                     parent3.style.display="grid"
                     parent3.style.gap="1rem"
@@ -821,8 +844,8 @@ addtocart3.addEventListener('mouseover', function() {
                    groceries.style.width="90vw"
                    groceries.style.height="auto"
                    groceries.style.overflow="auto"
-                   groceries.style.backgroundColor="black"
-                   groceries.style.color="white"
+                   groceries.style.backgroundColor="white"
+                   groceries.style.color="black"
                    groceries.style.position="absolute"
                    groceries.style.top="0%"
                    groceries.style.left="5%"
@@ -956,6 +979,11 @@ div2.style.transform="scale(1)"
 viewcart.append(div1,div2)
 document.body.append(viewcart)
 console.log(viewcart)
+console.log(cartitems)
+//
+//
+
+
          </script>
 </body>
 </html>

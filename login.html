@@ -72,7 +72,7 @@
     }
     .links a{
         text-decoration: none;
-        color: white;
+        color: black;
         font-size: 1.2rem;
     }
     .links a:hover{
@@ -126,10 +126,27 @@
         font-size: 2rem;
         font-weight: bold;   
     }
+    span{
+        background-color: antiquewhite;
+        padding: 16px 32px;
+        color:red;
+    }
     @keyframes panImage {
         0% { background-position: 0% 0%; }
         100% { background-position: 100% 0%; }
+    }#forgot{
+        color:white;
+        padding:10px;
+        text-decoration: none;
+        position:relative;
+        top:5px;
+        left:21rem;
+        font-weight: bold;
     }
+    #forgot:hover{
+        font-size: 1.2rem;
+    }
+   
     </style>
     </head>
 <body>
@@ -139,15 +156,16 @@
             <h3>Groceries delivered in 10 minutes</h3>
         </div>
         <div class="childb">
-            <form action="page1.html" id="123">
+            <form action="search.html" id="123">
                 <input type="email" placeholder="abc@gmail.com" id="login" required>
                 <input type="password" placeholder="Password" id="password" required>
-                <div class="links">
-                <a href="signup.html" id="signup"> Don't you have an account ? Sign Up</a>
                 <a href="forgot.html" id="forgot">Forgot Password?</a>
-                </div>
                 <input type="submit" value="Continue" id="continue"><br>
-                <button class="guest"><a href="page1.html">Login as a Guest</a></button>
+                <div class="links">
+                    <a href="signup.html" id="signup"> Don't you have an account ? <span>Sign-Up</span></a>
+
+                    </div>
+                <button class="guest"><a href="search.html">Login as a Guest</a></button>
             </form>
         </div>
     </div>
@@ -181,7 +199,7 @@
              // Signed in 
              const user = userCredential.user;
                 alert("User Signed In Successfully");
-                window.location.href="page1.html";
+                window.location.href="ser.html";
                 console.log("succesfully signed in");
              // ...
            })

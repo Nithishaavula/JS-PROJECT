@@ -8,18 +8,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color:gray;
+            background-color:white;
             padding: 10px;
         }
         h2 {
             color: black;
         }
         hr {
-            border: 1px solid orange;
+            border: 1px solid black;
             margin: 20px 0;
         }
         .profile {
-            background-color:orange;/* Blue */
+            background-color:black;
+            color:black;/* Blue */
             border: 2px solid white;
             color: white;
             text-align: center;
@@ -31,7 +32,7 @@
             border-radius: 50%;
         }
         .logout {
-            background-color:orange; /* Blue */
+            background-color:black; /* Blue */
             border: none;
             color: white;
             padding: 16px 32px;
@@ -44,6 +45,10 @@
             width:50vw;
             border-radius: 20px;
         }
+        .logout:hover{
+            background-color: red;
+            font-size: 2rem;
+        }
         .profile-container {
             display: flex;
             margin-bottom: 20px;
@@ -52,7 +57,7 @@
         .order{
             background-color:white;/* Blue */
             border: none;
-            color: orange;
+            color: black;
             padding: 15px 32px;
             text-align: center;
             text-decoration: none;
@@ -71,7 +76,7 @@
         }
         .order i {
             margin-right: 8px;
-            color:orange;
+            color:black;
         }
         .your-information {
             background-color: white;
@@ -85,7 +90,7 @@
         .your-information button {
             background-color: white;
             border: none;
-            color: orange;
+            color: black;
             padding: 10px 20px;
             text-align: left;
             text-decoration: none;
@@ -97,27 +102,27 @@
         }
         .your-information button i {
             margin-right: 8px;
-            color: orange;
+            color:black;
             display:inline-block;
             margin:1rem;
         }
         .your-information hr {
-            border: 1px solid orange;
+            border: 1px solid black;
             margin: 10px ;
         }
         .your-information button:hover {
-            background-color: orange;
-            color: white;
+            background-color:black;
+            color:white;
         }
         .your-information button:focus {
             outline: none;
-            box-shadow: 0 0 5px orange;
+            box-shadow: 0 0 5px white;
         }
         .your-information button:active {
-            background-color: darkorange;
+            background-color:white;
         }
         .your-information button:disabled {
-            background-color: lightgray;
+            background-color:white;
             color: gray;
             cursor: not-allowed;
         }

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fruits & Vegetables Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    #search {
+      margin: 1rem;
+      padding: 0.5rem;
+      width: 50%;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+    }
+
+    .category-buttons {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem;
+    }
+
+    .category-buttons button {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: black;
+      color: white;
+    }
+
+    .category-buttons button:hover {
+      background: white;
+      color: black;
+      border: 2px solid black;
+    }
+    .bprofile{
+      cursor:pointer;
+      background-color:white;
+      font-size: 20px;
+      display:inline-block;
+    }
+    .bprofile:hover{
+      color:black;
+    }
+    .viewcarts{
+      display:flex;
+      justify-content: space-around;
+      background-color:black;
+    }
+    #button{
+      padding:16px 32px;
+      font-size:20px;
+      background-color: black;
+      color: white;
+      border:1px solid white;
+      cursor:pointer;
+      position:absolute;
+      z-index:1000;
+      left:0;
+      display:none;
+    }
+    #button:hover{
+      background-color: white;
+      color:black;
+
+    }
+    #button1{
+      padding:16px 32px;
+      font-size:20px;
+      background-color:white;
+      color:black;
+      border:1px solid white;
+      cursor:pointer;
+      position:absolute;
+      z-index: 1000;
+      right:0;
+      top:0;
+
+    }
+    #button1:hover{
+      background-color: white;
+      color:black;
+    }
+    #one{
+      height:90vh;
+    }
+  
+  </style>
+</head>
+<body>
+  <div class="profile">
+    <button class="bprofile" id="profile" onclick='profile()'>
+        <i class="fa-solid fa-user"></i>
+    </button>
+    </div>
+ <div id="one">
+  <input type="text" id="search" placeholder="Search Fruits or Vegetables...">
+
+  <div class="category-buttons">
+    <button id="f">Fruits</button>
+    <button id="v">Vegetables</button>
+    <button id="g">Groceries</button>
+  </div>
+
+  <div id="cards"></div>
+  <div class="viewcarts" id="div">
+    <button id="button">Instant</button>
+    <button id="button1">
+      <i class="fa-solid fa-cart-shopping"></i>
+    </button>
+ </div>
+ </div>
+  <script>
+    let cartitems = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const fruitsData = [
+      { name: "Apple", img: "apple.jpeg", weight: "500gm", price: "50" },
+      { name: "Banana", img: "banana.jpeg", weight: "1kg", price: "40" },
+      { name: "Mango", img: "mango.jpeg", weight: "2kg", price: "60" },
+      { name: "Grapes", img: "grapes.jpg", weight: "1kg", price: "70" },
+      { name: "Orange", img: "orange.jpeg", weight: "1kg", price: "80" },
+      { name: "Pineapple", img: "pineapple.jpeg", weight: "1kg", price: "90" },
+      { name: "Strawberry", img: "strawberry.jpeg", weight: "500gm", price: "100" },
+      { name: "Blueberry", img: "blueberry.jpeg", weight: "1kg", price: "110" },
+      { name: "Watermelon", img: "water.jpeg", weight: "1kg", price: "120" },
+      { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "130" },
+      { name: "Kiwi", img: "kiwi.jpeg", weight: "500gm", price: "140" },
+      { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" }
+    ];
+
+    const vegetablesData = [
+      { name: "Onion", img: "onion.jpeg", weight: "1kg", price: "50" },
+      { name: "Potato", img: "potato.webp", weight: "2kg", price: "40" },
+      { name: "Cabbage", img: "cabbage.jpeg", weight: "Dozen", price: "60" },
+      { name: "Cucumber", img: "cucumber.jpeg", weight: "1piece", price: "70" },
+      { name: "Carrot", img: "carrot.jpeg", weight: "1.5kg", price: "80" },
+      { name: "Ladies finger", img: "Ladies.webp", weight: "5Litres", price: "90" },
+      { name: "Spinach", img: "spinach.jpeg", weight: "1/2 litre", price: "100" },
+      { name: "Tomato", img: "tomato.jpeg", weight: "1 kg Rice", price: "110" },
+      { name: "Cauliflower", img: "cauliflower.jpeg", weight: "1 Litre", price: "120" },
+      { name: "Broccoli", img: "broccoli.jpeg", weight: "Tray(30Pieces)", price: "130" },
+      { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "140" },
+      { name: "Zucchini", img: "zucchini.webp", weight: "1kg", price: "150" }
+    ];
+    const groceriesData=[
+       {name:"thumsup",img:"thumsup.jpeg",weight:"1 litre",price:"50"},
+       {name:"Milk",img:"milk.jpeg",weight:"1/2 litre",price:"30"},
+       {name:"meat(chicken)",img:"meat.jpeg",weight:"1 kg",price:"250"},
+       {name:"Rice",img:"rice.jpeg",weight:"1 kg",price:"50"},
+       {name:"Redchilli",img:"redchilli.jpeg",weight:"1/2 kg",price:"60"},
+       {name:"Indian(Basmathi Rice)",img:"indian.jpeg",weight:"1 kg",price:"110"},
+       {name:"Freedom Oil",img:"freedom.jpeg",weight:"5litres",price:"800"},
+       {name:"Eggs",img:"eggs.jpeg",weight:"30 Pieces",price:"230"},
+       {name:"Eggplant",img:"eggplant.jpeg",weight:"1",price:"200"},
+       {name:"Dryfruits",img:"dryfruits.jpeg",weight:"2 kg",price:"400"},
+       {name:"(Dal)KandiPappu",img:"dal.jpeg",weight:"1 kg",price:"60"},
+       {name:"Curd",img:"curd.jpeg",weight:"1/2 kg",price:"50"},
+       {name:"Ashirvad",img:"ashirvad.jpeg",weight:"1 kg",price:"100"},
+       {name:"Eggs",img:"eggs.jpeg",weight:"10pieces",price:"84"}
+    ];
+
+    const cards = document.getElementById('cards');
+    const search = document.getElementById('search');
+
+    function renderItems(data) {
+      cards.innerHTML = ""; // clear previous
+      data.forEach(item => {
+        let card = document.createElement("div");
+        card.style.boxShadow = "0px 0px 5px 10px whiteSmoke";
+        card.style.padding = "1rem";
+        card.style.width = "200px";
+        card.style.borderRadius = "10px";
+        card.style.background = "white";
+        card.style.color = "black";
+        card.style.margin = "1rem";
+        card.style.textAlign = "center";
+        card.style.display = "grid";
+        card.style.gap = "1rem";
+
+        let img = document.createElement('img');
+        img.setAttribute("src", item.img);
+        img.style.height = "100px";
+
+        let name = document.createElement("p");
+        name.innerHTML = item.name;
+
+        let weight = document.createElement("h6");
+        weight.innerHTML = item.weight;
+
+        let price = document.createElement("i");
+        price.setAttribute("class", "fa-solid fa-indian-rupee-sign");
+        price.innerHTML = item.price;
+
+        let button = document.createElement("button");
+        button.innerHTML = "Add to Cart";
+        button.style.backgroundColor = "black";
+        button.style.color = "white";
+        button.style.border = "none";
+        button.style.cursor = "pointer";
+        button.style.padding = "1rem";
+        button.style.borderRadius = "10px";
+        button.style.boxShadow = "0px 0px 5px 10px whiteSmoke";
+        button.style.marginTop = "1rem";
+        button.style.width = "100%";
+
+        // Hover
+        button.addEventListener("mouseover", () => {
+          button.style.backgroundColor = "white";
+          button.style.color = "black";
+          button.style.border = "2px solid black";
+          button.style.transform = "scale(1.1)";
+          button.style.transition = "0.3s";
+        });
+        button.addEventListener("mouseout", () => {
+          button.style.backgroundColor = "black";
+          button.style.color = "white";
+          button.style.border = "none";
+          button.style.transform = "scale(1)";
+        });
+
+        // Add to cart
+        button.addEventListener("click", () => {
+          cartitems.push(item);
+          localStorage.setItem("cart", JSON.stringify(cartitems));
+          alert(`${item.name} added to cart`);
+        });
+
+        card.append(img, name, weight, price, button);
+        cards.appendChild(card);
+      });
+
+      cards.style.display = "flex";
+      cards.style.flexWrap = "wrap";
+      cards.style.justifyContent = "space-around";
+    }
+
+    // Render initial fruits
+    renderItems(fruitsData);
+
+    // Button click listeners
+    document.getElementById('f').addEventListener('click', () => renderItems(fruitsData));
+    document.getElementById('v').addEventListener('click', () => renderItems(vegetablesData));
+    document.getElementById('g').addEventListener('click', () => renderItems(groceriesData));
+
+
+    // Search functionality
+    search.addEventListener("input", () => {
+      const val = search.value.toLowerCase();
+      const allItems = [...fruitsData, ...vegetablesData,...groceriesData];
+      const filtered = allItems.filter(item => item.name.toLowerCase().includes(val));
+      renderItems(filtered);
+    });
+    let card=document.getElementById('one')
+   card.style.overflow="auto"
+   card.style.zIndex="1000"
+   card.style.scrollbarWidth="none"
+    let f=document.getElementById('f');
+   f.addEventListener('click',function()
+   { 
+    //  e.preventDefault()
+     let one=document.getElementById('button')
+      one.style.display="block"
+      one.style.display="flex"
+      one.style.cursor="pointer"
+      one.style.position="absolute"
+      one.style.top="600px"
+      one.style.width="100%"
+
+      //v.style.display="block"
+      one.addEventListener('click',()=>{
+     window.location.href="ser.html"
+      })
+
+   })
+     let two=document.getElementById('button1')
+    {
+       // two.style.width="100%"
+        two.addEventListener('click',()=>{
+          window.location.href="page4.html"
+        })
+    }
+    function profile(){
+      window.location.href="profile.html"
+    }
+  </script>
+</body>
+</html>
+
