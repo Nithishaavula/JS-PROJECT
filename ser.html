@@ -164,8 +164,7 @@
  </div>
  </div>
   <script>
-    let cartitems = JSON.parse(localStorage.getItem("cart")) || [];
-
+   let cartitems = JSON.parse(localStorage.getItem("cart")) || [];
     const fruitsData = [
       { name: "Apple", img: "apple.jpeg", weight: "500gm", price: "50" },
       { name: "Banana", img: "banana.jpeg", weight: "1kg", price: "40" },
@@ -273,10 +272,26 @@
 
         // Add to cart
         button.addEventListener("click", () => {
-          cartitems.push(item);
+          const existing = cartitems.find(i => i.name === item.name);
+          if (!existing) {
+            item.qty = 1;
+            cartitems.push(item);
+          } else {
+            existing.qty += 1;
+          }
           localStorage.setItem("cart", JSON.stringify(cartitems));
-          alert(`${item.name} added to cart`);
-          let addToCartBtn = document.createElement("button");
+          renderItems([item]); // Optional: rerender this item to update button UI
+        });
+        const cartMap = new Map(cartitems.map(i => [i.name, i]));
+
+data.forEach(item => {
+  let isInCart = cartMap.has(item.name);
+  let existingQty = isInCart ? cartMap.get(item.name).qty : 0;
+  
+  // Then use `existingQty` to decide if you show 'Add to Cart' or quantity UI
+});
+
+        let addToCartBtn = document.createElement("button");
         addToCartBtn.innerHTML = "Add to Cart";
         addToCartBtn.style.backgroundColor = "black";
         addToCartBtn.style.color = "white";
@@ -341,12 +356,10 @@
           });
       
           quantityDiv.append(minusBtn, qtyDisplay, plusBtn);
-        });
         card.append(img, name, weight, price, button);
        
         cards.appendChild(card);
-      });
-
+        });
       cards.style.display = "flex";
       cards.style.flexWrap = "wrap";
       cards.style.justifyContent = "space-around";
