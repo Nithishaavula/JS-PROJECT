@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Payment</title>
-  <link rel="icon" href="favicon.png" type="instant/png">
+  <link rel="icon" href="favicon.png" type="image/png">
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -44,7 +44,6 @@
     .btn-red {
       background-color: #dc3545;
       color: white;
-      margin-left: 10px;
     }
 
     input[type="file"], textarea, select {
@@ -60,6 +59,19 @@
       justify-content: space-between;
       align-items: center;
       margin: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item-controls button {
+      padding: 5px 10px;
+      font-size: 18px;
+      border-radius: 5px;
     }
 
     #qrContainer img {
@@ -148,12 +160,18 @@
       let total = 0;
 
       cart.forEach((item, index) => {
-        total += parseFloat(item.price);
+        const quantity = item.quantity || 1;
+        const price = parseFloat(item.price) * quantity;
+        total += price;
+
         const row = document.createElement("div");
         row.classList.add("item-row");
         row.innerHTML = `
-          <span>${item.name} - ₹${item.price}</span>
-          <button class="btn-red" onclick="removeItem(${index})">Remove</button>
+          <span>${item.name} - ₹${item.price} x ${quantity} = ₹${price.toFixed(2)}</span>
+          <div class="item-controls">
+            <button onclick="decreaseQuantity(${index})">−</button>
+            <button onclick="increaseQuantity(${index})">+</button>
+          </div>
         `;
         cartItemsContainer.appendChild(row);
       });
@@ -161,8 +179,17 @@
       totalDisplay.innerText = `Total: ₹${total.toFixed(2)}`;
     }
 
-    window.removeItem = (index) => {
-      cart.splice(index, 1);
+    window.increaseQuantity = (index) => {
+      cart[index].quantity = (cart[index].quantity || 1) + 1;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    };
+
+    window.decreaseQuantity = (index) => {
+      cart[index].quantity = (cart[index].quantity || 1) - 1;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
       localStorage.setItem("cart", JSON.stringify(cart));
       renderCart();
     };
@@ -178,49 +205,51 @@
       qrContainer.innerHTML = "";
       upiButtons.innerHTML = "";
 
-      if (isUPI) {
-        submitBtn.style.display = "inline-block";
-        addressSubmitBtn.style.display = "none";
-      } else {
-        submitBtn.style.display = "none";
-        addressSubmitBtn.style.display = "inline-block";
-      }
+      submitBtn.style.display = isUPI ? "inline-block" : "none";
+      addressSubmitBtn.style.display = isUPI ? "none" : "inline-block";
     });
 
     upiSelect.addEventListener("change", () => {
       const method = upiSelect.value;
-      const total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
+      const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * (item.quantity || 1)), 0).toFixed(2);
       const upiID = "aavulan@fifederal";
       const payeeName = "Aavulan";
       const transactionNote = "Payment";
       const currency = "INR";
 
+      qrContainer.innerHTML = "";
+      upiButtons.innerHTML = "";
+
       if (method === "QR") {
         qrContainer.innerHTML = `<img src="qr.jpg" alt="QR Code" />`;
-      } else if (["PhonePe", "GPay", "Paytm"].includes(method)) {
-        const url = `upi://pay?pa=${upiID}&pn=${payeeName}&am=${total}&cu=${currency}`;
-        upiButtons.innerHTML = `
-          <a href="${url}" target="_blank">Pay via ${method}</a>
-        `;
+      } else {
+        const url = `upi://pay?pa=${upiID}&pn=${payeeName}&am=${total}&cu=${currency}&tn=${transactionNote}`;
+        upiButtons.innerHTML = `<a href="${url}" target="_blank">Pay via ${method}</a>`;
       }
     });
 
     submitBtn.addEventListener("click", () => {
       if (screenshotInput.files.length > 0) {
-        alert("Payment was received! Please check the screenshot.");
-        // Store order with UPI payment
-        const order = {
-          id: new Date().getTime(),
-          items: cart,
-          total: totalDisplay.innerText,
-          paymentStatus: "UPI",
-          screenshot: screenshotInput.files[0].name
-        };
-        const orders = JSON.parse(localStorage.getItem("orders")) || [];
-        orders.push(order);
-        localStorage.setItem("orders", JSON.stringify(orders));
-        orderPlacedBtn.style.display = "block";
-        submitBtn.style.display = "none";
+        const file = screenshotInput.files[0];
+        const storageRef = ref(storage, 'screenshots/' + file.name);
+        uploadBytes(storageRef, file).then((snapshot) => {
+          return getDownloadURL(snapshot.ref);
+        }).then((url) => {
+          const order = {
+            id: new Date().getTime(),
+            items: cart,
+            total: totalDisplay.innerText,
+            paymentStatus: "UPI",
+            screenshotUrl: url
+          };
+          const orders = JSON.parse(localStorage.getItem("orders")) || [];
+          orders.push(order);
+          localStorage.setItem("orders", JSON.stringify(orders));
+          orderPlacedBtn.style.display = "block";
+          submitBtn.style.display = "none";
+        }).catch(error => {
+          alert("Upload failed: " + error.message);
+        });
       } else {
         alert("Please upload a payment screenshot.");
       }
@@ -229,7 +258,6 @@
     addressSubmitBtn.addEventListener("click", () => {
       const address = addressInput.value;
       if (address.trim()) {
-        // Store order with COD payment
         const order = {
           id: new Date().getTime(),
           items: cart,
@@ -240,19 +268,20 @@
         const orders = JSON.parse(localStorage.getItem("orders")) || [];
         orders.push(order);
         localStorage.setItem("orders", JSON.stringify(orders));
-
+        localStorage.setItem("address", address);
         orderPlacedBtn.style.display = "block";
         addressSubmitBtn.style.display = "none";
-        localStorage.setItem("address", address);
       }
     });
 
     orderPlacedBtn.addEventListener("click", () => {
-      window.location.href = "orders.html"; // Redirect to the Orders Page
+      window.location.href = "orders.html";
     });
   </script>
 </body>
 </html>
+
+
 
 
 
