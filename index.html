@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FreshGro - Fresh Groceries Delivered</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -267,13 +268,59 @@
       from { transform: translateY(40px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+    i{
+      padding:10px;
+    }
 
+
+    /* Mobile View */
     @media (max-width: 768px) {
       nav ul {
         display: none;
       }
+
       header h1 {
         font-size: 2.5rem;
+      }
+
+      header p {
+        font-size: 1.1rem;
+      }
+
+      .cta-btn {
+        padding: 12px 25px;
+      }
+
+      .categories-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .category-card {
+        padding: 15px;
+        font-size: 1rem;
+      }
+
+      footer {
+        font-size: 0.9rem;
+      }
+
+      .nav-actions {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .nav-btn {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+      }
+
+      .mission-section h2 {
+        font-size: 2rem;
+      }
+
+      .mission-section p {
+        font-size: 1rem;
       }
     }
   </style>
@@ -347,6 +394,8 @@
   <footer id="contact">
     <p>© 2025 Instant Groceries. All rights reserved.</p>
     <p>Contact us: support@instant.com</p>
+    <p><i class="fa-brands fa-instagram"></i>Instagram</p>
+    <p><i class="fa-brands fa-facebook-f"></i>Facebook</p>
   </footer>
 
   <!-- Scripts -->
@@ -406,7 +455,5 @@
   </script>
 </body>
 </html>
-
-
 
 

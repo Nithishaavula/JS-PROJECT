@@ -134,7 +134,8 @@
     @keyframes panImage {
         0% { background-position: 0% 0%; }
         100% { background-position: 100% 0%; }
-    }#forgot{
+    }
+    #forgot{
         color:white;
         padding:10px;
         text-decoration: none;
@@ -146,9 +147,128 @@
     #forgot:hover{
         font-size: 1.2rem;
     }
-   
+
+    /* Desktop View */
+    @media (min-width: 1024px) {
+        .login {
+            gap: 3rem;
+            padding: 2rem;
+        }
+        .childa h2 {
+            font-size: 6rem;
+        }
+        .childa h3 {
+            font-size: 2.5rem;
+        }
+        .childb input {
+            padding: 4%;
+            font-size: 1.3rem;
+        }
+        #continue {
+            font-size: 1.8rem;
+            padding: 4%;
+        }
+        .links {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .links a {
+            font-size: 1.3rem;
+        }
+        .guest {
+            font-size: 1.5rem;
+            padding: 1.5% 3%;
+        }
+        #forgot {
+            left: 24rem;
+        }
+        h2:nth-child(2) {
+            font-size: 5rem;
+        }
+    }
+
+    /* Tablet View */
+    @media (max-width: 1024px) and (min-width: 768px) {
+        .login {
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .childa h2 {
+            font-size: 4.5rem;
+        }
+        .childa h3 {
+            font-size: 2rem;
+        }
+        .childb input {
+            padding: 4%;
+        }
+        #continue {
+            font-size: 1.6rem;
+            padding: 3%;
+        }
+        .links {
+            flex-direction: column;
+            align-items: center;
+        }
+        .links a {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .guest {
+            font-size: 1.4rem;
+            padding: 1.5% 3%;
+        }
+        #forgot {
+            left: 0;
+            font-size: 1.2rem;
+        }
+        h2:nth-child(2) {
+            font-size: 4rem;
+        }
+    }
+
+    /* Mobile View */
+    @media (max-width: 767px) {
+        .login {
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+        .childa h2 {
+            font-size: 3.5rem;
+        }
+        .childa h3 {
+            font-size: 1.5rem;
+        }
+        .childb input {
+            padding: 3%;
+        }
+        #continue {
+            font-size: 1.4rem;
+            padding: 3%;
+        }
+        .links {
+            flex-direction: column;
+            align-items: center;
+        }
+        .links a {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+        .guest {
+            font-size: 1.4rem;
+            padding: 1.5% 3%;
+        }
+        #forgot {
+            left: 0;
+            font-size: 1rem;
+        }
+        h2:nth-child(2) {
+            font-size: 3.5rem;
+        }
+    }
+
     </style>
-    </head>
+</head>
 <body>
     <div class="login">
         <div class="childa">
@@ -163,7 +283,6 @@
                 <input type="submit" value="Continue" id="continue"><br>
                 <div class="links">
                     <a href="signup.html" id="signup"> Don't you have an account ? <span>Sign-Up</span></a>
-
                     </div>
                 <button class="guest"><a href="search.html">Login as a Guest</a></button>
             </form>
@@ -209,34 +328,10 @@
                 alert(errorMessage);
            });
          });
-        
-       
-         // Initialize Firebase
-       //reset password
-      // import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-      // let forgot=document.getElementById("forgot");
-      // forgot.addEventListener("click",function(){
-      //  let email=document.getElementById("login").value;
-
-       // const auth = getAuth(app);
-     //   sendPasswordResetEmail(auth,email)
-       //   .then(() => {
-            // Password reset email sent!
-            // ..
-          //  alert("Password reset email sent! Please check your inbox.");
-       //   })
-         // .catch((error) => {
-           // const errorCode = error.code;
-        //    const errorMessage = error.message;
-           // alert(errorMessage);
-        //  });
-       //})
-         
-    
-       
-         
     </script>
-    </body>
+</body>
+</html>
+
 
 
 
