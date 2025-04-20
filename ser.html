@@ -210,7 +210,7 @@
        {name:"Ashirvad",img:"ashirvad.jpeg",weight:"1 kg",price:"100"},
        {name:"Eggs",img:"eggs.jpeg",weight:"10pieces",price:"84"}
     ];
-
+    const allData = [...fruitsData, ...vegetablesData, ...groceriesData];
     const cards = document.getElementById('cards');
     const search = document.getElementById('search');
 
@@ -239,132 +239,78 @@
         let weight = document.createElement("h6");
         weight.innerHTML = item.weight;
 
-        let price = document.createElement("i");
-        price.setAttribute("class", "fa-solid fa-indian-rupee-sign");
-        price.innerHTML = item.price;
+        let price = document.createElement("div");
+        price.innerHTML = `<i class="fa-solid fa-indian-rupee-sign"></i> ${item.price}`;
+        
+        let isInCart = cartitems.find(i => i.name === item.name);
+        let buttonArea = document.createElement("div");
 
-        let button = document.createElement("button");
-        button.innerHTML = "Add to Cart";
-        button.style.backgroundColor = "black";
-        button.style.color = "white";
-        button.style.border = "none";
-        button.style.cursor = "pointer";
-        button.style.padding = "1rem";
-        button.style.borderRadius = "10px";
-        button.style.boxShadow = "0px 0px 5px 10px whiteSmoke";
-        button.style.marginTop = "1rem";
-        button.style.width = "100%";
-
-        // Hover
-        button.addEventListener("mouseover", () => {
-          button.style.backgroundColor = "white";
-          button.style.color = "black";
-          button.style.border = "2px solid black";
-          button.style.transform = "scale(1.1)";
-          button.style.transition = "0.3s";
-        });
-        button.addEventListener("mouseout", () => {
-          button.style.backgroundColor = "black";
-          button.style.color = "white";
-          button.style.border = "none";
-          button.style.transform = "scale(1)";
-        });
-
-        // Add to cart
-        button.addEventListener("click", () => {
-          const existing = cartitems.find(i => i.name === item.name);
-          if (!existing) {
-            item.qty = 1;
-            cartitems.push(item);
-          } else {
-            existing.qty += 1;
-          }
-          localStorage.setItem("cart", JSON.stringify(cartitems));
-          renderItems([item]); // Optional: rerender this item to update button UI
-        });
-        const cartMap = new Map(cartitems.map(i => [i.name, i]));
-
-data.forEach(item => {
-  let isInCart = cartMap.has(item.name);
-  let existingQty = isInCart ? cartMap.get(item.name).qty : 0;
-  
-  // Then use `existingQty` to decide if you show 'Add to Cart' or quantity UI
-});
-
-        let addToCartBtn = document.createElement("button");
-        addToCartBtn.innerHTML = "Add to Cart";
-        addToCartBtn.style.backgroundColor = "black";
-        addToCartBtn.style.color = "white";
-        addToCartBtn.style.border = "none";
-        addToCartBtn.style.cursor = "pointer";
-        addToCartBtn.style.padding = "1rem";
-        addToCartBtn.style.borderRadius = "10px";
-        addToCartBtn.style.boxShadow = "0px 0px 5px 10px whiteSmoke";
-        addToCartBtn.style.marginTop = "1rem";
-        addToCartBtn.style.width = "100%";
-          let quantityDiv = document.createElement("div");
-          quantityDiv.style.display = "none";
-          quantityDiv.style.alignItems = "center";
-          quantityDiv.style.justifyContent = "center";
-          quantityDiv.style.gap = "10px";
-  
-          let minusBtn = document.createElement("button");
-          minusBtn.innerHTML = "➖";
-          minusBtn.style.padding = "0.5rem";
-          minusBtn.style.fontSize = "18px";
-  
-          let qtyDisplay = document.createElement("span");
-          qtyDisplay.innerText = "1";
-  
-          let plusBtn = document.createElement("button");
-          plusBtn.innerHTML = "➕";
-          plusBtn.style.padding = "0.5rem";
-          plusBtn.style.fontSize = "18px";
-         let addToCartBtn1= document.createElement("button");
-          addToCartBtn1.addEventListener("click", () => {
+        if (!isInCart) {
+          let addBtn = document.createElement("button");
+          addBtn.innerText = "Add to Cart";
+          addBtn.style.backgroundColor = "black";
+          addBtn.style.color = "white";
+          addBtn.style.border = "none";
+          addBtn.style.padding = "1rem";
+          addBtn.style.borderRadius = "10px";
+          addBtn.style.cursor = "pointer";
+          addBtn.style.marginTop = "1rem";
+          addBtn.style.width = "100%";
+          addBtn.addEventListener("click", () => {
             item.qty = 1;
             cartitems.push(item);
             localStorage.setItem("cart", JSON.stringify(cartitems));
-            addToCartBtn.style.display = "none";
-            quantityDiv.style.display = "flex";
-            card.style.animation = "pop 0.3s ease";
-            setTimeout(() => card.style.animation = "", 300);
+            renderItems(data);
           });
-  
-          plusBtn.addEventListener("click", () => {
+          buttonArea.appendChild(addBtn);
+        } else {
+          let quantityDiv = document.createElement("div");
+          quantityDiv.style.display = "flex";
+          quantityDiv.style.alignItems = "center";
+          quantityDiv.style.justifyContent = "center";
+          quantityDiv.style.gap = "10px";
+          quantityDiv.style.marginTop = "1rem";
+
+          let minus = document.createElement("button");
+          minus.innerText = "➖";
+          let qty = document.createElement("span");
+          qty.innerText = isInCart.qty;
+          let plus = document.createElement("button");
+          plus.innerText = "➕";
+
+          minus.addEventListener("click", () => {
+            let index = cartitems.findIndex(i => i.name === item.name);
+            if (index !== -1) {
+              cartitems[index].qty -= 1;
+              if (cartitems[index].qty <= 0) {
+                cartitems.splice(index, 1);
+              }
+              localStorage.setItem("cart", JSON.stringify(cartitems));
+              renderItems(data);
+            }
+          });
+
+          plus.addEventListener("click", () => {
             let found = cartitems.find(i => i.name === item.name);
             if (found) {
               found.qty += 1;
-              qtyDisplay.innerText = found.qty;
               localStorage.setItem("cart", JSON.stringify(cartitems));
+              renderItems(data);
             }
           });
-  
-          minusBtn.addEventListener("click", () => {
-            let foundIndex = cartitems.findIndex(i => i.name === item.name);
-            if (foundIndex !== -1) {
-              cartitems[foundIndex].qty -= 1;
-              if (cartitems[foundIndex].qty <= 0) {
-                cartitems.splice(foundIndex, 1);
-                quantityDiv.style.display = "none";
-                addToCartBtn.style.display = "block";
-              } else {
-                qtyDisplay.innerText = cartitems[foundIndex].qty;
-              }
-              localStorage.setItem("cart", JSON.stringify(cartitems));
-            }
-          });
-      
-          quantityDiv.append(minusBtn, qtyDisplay, plusBtn);
-        card.append(img, name, weight, price, button);
-       
+
+          quantityDiv.append(minus, qty, plus);
+          buttonArea.appendChild(quantityDiv);
+        }
+
+        card.append(img, name, weight, price, buttonArea);
         cards.appendChild(card);
-        });
+      });
+
       cards.style.display = "flex";
       cards.style.flexWrap = "wrap";
       cards.style.justifyContent = "space-around";
     }
-  
     // Render initial fruits
     renderItems(fruitsData);
 
