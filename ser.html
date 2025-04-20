@@ -68,14 +68,16 @@
     #button1{
       padding:16px 32px;
       font-size:20px;
-      background-color:white;
-      color:black;
+      background-color:black;
+      color:white;
       border:1px solid white;
+      width:20%;
+      height:50;
       cursor:pointer;
       position:absolute;
       z-index: 1000;
       right:0;
-      top:0;
+      bottom:0;
 
     }
     #button1:hover{
@@ -85,23 +87,152 @@
     #one{
       height:90vh;
     }
+    .marquee {
+      background: orange;
+      color: white;
+      padding: 0.5rem;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: marquee 15s linear infinite;
+    }
+    .navbar {
+      position: sticky;
+      top: 0;
+      background: black;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      z-index: 999;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .navbar button, .profile-btn {
+      background: white;
+      color: black;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .navbar button:hover, .profile-btn:hover {
+      background: #f1f1f1;
+    }
+    @keyframes marquee {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+ /* Responsive Styling */
+ @media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    margin: 5px 0;
+  }
+
+  .navbar button, .profile-btn {
+    width: 80%;
+  }
+
+  #search {
+    width: 80%;
+    margin-top: 10px;
+  }
+
+  #cards > div {
+    width: 90%;
+  }
+
+  .floating-cart {
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .navbar button, .profile-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  #search {
+    width: 50%;
+    margin-top: 10px;
+  }
+
+  #cards > div {
+    width: 40%;
+  }
+}
+
+@media (min-width: 1025px) {
+  .navbar {
+    flex-direction: row;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-direction: row;
+  }
+
+  #cards > div {
+    width: 200px;
+  }
+
+  #search {
+    width: 250px;
+  }
+}
   
   </style>
 </head>
 <body>
-  <div class="profile">
+  <div class="marquee">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</div>
+  <div class="navbar">
+    <div class="nav-left">
+      <button onclick="renderItems(allData)">All</button>
+      <button onclick="renderItems(fruitsData)" id="f">Fruits</button>
+      <button onclick="renderItems(vegetablesData)" id="v">Vegetables</button>
+      <button onclick="renderItems(groceriesData)" id="g">Groceries</button>
+    </div>
+  <div class="profile-btn">
     <button class="bprofile" id="profile" onclick='profile()'>
         <i class="fa-solid fa-user"></i>
     </button>
     </div>
+    </div>
  <div id="one">
   <input type="text" id="search" placeholder="Search Fruits or Vegetables...">
 
-  <div class="category-buttons">
-    <button id="f">Fruits</button>
-    <button id="v">Vegetables</button>
-    <button id="g">Groceries</button>
-  </div>
 
   <div id="cards"></div>
   <div class="viewcarts" id="div">
@@ -264,7 +395,8 @@
       one.style.display="flex"
       one.style.cursor="pointer"
       one.style.position="absolute"
-      one.style.top="600px"
+      one.style.top="600"
+      one.style.bottom="0px"
       one.style.width="100%"
 
       //v.style.display="block"
