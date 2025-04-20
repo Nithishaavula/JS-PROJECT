@@ -7,6 +7,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="favicon.png" type="instant/png">
   <style>
     * {
       margin: 0;
@@ -140,10 +141,28 @@
       border-radius: 50%;
     }
 
+    /* Responsive Styling */
     @media (max-width: 600px) {
       .navbar {
         flex-direction: column;
         align-items: center;
+      }
+
+      .nav-left,
+      .nav-right {
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        margin: 5px 0;
+      }
+
+      .navbar button, .profile-btn {
+        width: 80%;
+      }
+
+      #search {
+        width: 80%;
+        margin-top: 10px;
       }
 
       #cards > div {
@@ -154,10 +173,52 @@
         bottom: 10px;
         right: 10px;
       }
+    }
+
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .navbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .nav-left,
+      .nav-right {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .navbar button, .profile-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.95rem;
+      }
 
       #search {
-        width: 80%;
+        width: 50%;
         margin-top: 10px;
+      }
+
+      #cards > div {
+        width: 40%;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .navbar {
+        flex-direction: row;
+      }
+
+      .nav-left,
+      .nav-right {
+        flex-direction: row;
+      }
+
+      #cards > div {
+        width: 200px;
+      }
+
+      #search {
+        width: 250px;
       }
     }
   </style>
@@ -187,7 +248,6 @@
 </div>
 
 <script>
-  // Firebase Config
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -199,7 +259,6 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  // Dummy Product Data
   const fruitsData = [
     { name: "Apple", img: "apple.jpeg", weight: "500gm", price: "50" },
     { name: "Banana", img: "banana.jpeg", weight: "1kg", price: "40" },
@@ -217,8 +276,8 @@
     { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "130" },
     { name: "Kiwi", img: "kiwi.jpeg", weight: "500gm", price: "140" },
     { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" }
-
   ];
+
   const vegetablesData = [
     { name: "Carrot", img: "carrot.jpeg", weight: "1kg", price: "80" },
     { name: "Onion", img: "onion.jpeg", weight: "1kg", price: "50" },
@@ -234,6 +293,7 @@
     { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "140" },
     { name: "Zucchini", img: "zucchini.webp", weight: "1kg", price: "150" }
   ];
+
   const groceriesData = [
     { name: "Milk", img: "milk.jpeg", weight: "1L", price: "60" },
     { name: "Rice", img: "rice.jpeg", weight: "1kg", price: "60" },
@@ -278,10 +338,8 @@
         localStorage.setItem("cart", JSON.stringify(cart));
         updateCartCount();
 
-        // Firebase Upload
         db.collection("cart").add(item).then(() => console.log("Item added to Firestore"));
 
-        // Button Animation
         btn.innerHTML = "✔️ Added";
         btn.style.backgroundColor = "green";
         setTimeout(() => {
@@ -294,20 +352,19 @@
     });
   }
 
-  // Search Functionality
   document.getElementById("search").addEventListener("input", function () {
     const query = this.value.toLowerCase();
     const filtered = allData.filter(item => item.name.toLowerCase().includes(query));
     renderItems(filtered);
   });
 
-  // Initialize
   renderItems(allData);
   updateCartCount();
 </script>
 
 </body>
 </html>
+
 
 
 
