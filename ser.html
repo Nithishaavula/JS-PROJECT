@@ -305,8 +305,8 @@
           plusBtn.innerHTML = "➕";
           plusBtn.style.padding = "0.5rem";
           plusBtn.style.fontSize = "18px";
-        //  let addToCartBtn = document.createElement("button");
-          addToCartBtn.addEventListener("click", () => {
+         let addToCartBtn1= document.createElement("button");
+          addToCartBtn1.addEventListener("click", () => {
             item.qty = 1;
             cartitems.push(item);
             localStorage.setItem("cart", JSON.stringify(cartitems));
@@ -343,6 +343,7 @@
           quantityDiv.append(minusBtn, qtyDisplay, plusBtn);
         });
         card.append(img, name, weight, price, button);
+       
         cards.appendChild(card);
       });
 
