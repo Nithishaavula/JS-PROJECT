@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fruits & Vegetables Store</title>
+  <title>Instant Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    *{
+      padding:0px;
+      margin:0px;
+      box-sizing: border-box;
+    }
+    body{
+      margin:0;
+      padding:0;
+      font-family: sans-serif;
+      overflow-x: hidden
+    }
     #search {
       margin: 1rem;
       padding: 0.5rem;
@@ -13,10 +25,11 @@
       border-radius: 10px;
       border: 2px solid #ccc;
     }
-
     .category-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
       margin: 1rem;
     }
 
@@ -27,6 +40,7 @@
       border-radius: 5px;
       background: black;
       color: white;
+      font-size: 1rem;
     }
 
     .category-buttons button:hover {
@@ -43,49 +57,10 @@
     .bprofile:hover{
       color:black;
     }
-    .viewcarts{
-      display:flex;
-      justify-content: space-around;
-      background-color:black;
-    }
-    #button{
-      padding:16px 32px;
-      font-size:20px;
-      background-color: black;
-      color: white;
-      border:1px solid white;
-      cursor:pointer;
-      position:absolute;
-      z-index:1000;
-      left:0;
-      display:none;
-    }
-    #button:hover{
-      background-color: white;
-      color:black;
 
-    }
-    #button1{
-      padding:16px 32px;
-      font-size:20px;
-      background-color:black;
-      color:white;
-      border:1px solid white;
-      width:20%;
-      height:50;
-      cursor:pointer;
-      position:absolute;
-      z-index: 1000;
-      right:0;
-      bottom:0;
-
-    }
-    #button1:hover{
-      background-color: white;
-      color:black;
-    }
     #one{
       height:90vh;
+      overflow-y: auto;
     }
     .marquee {
       background: orange;
@@ -96,6 +71,7 @@
       overflow: hidden;
       animation: marquee 15s linear infinite;
     }
+
     .navbar {
       position: sticky;
       top: 0;
@@ -106,44 +82,233 @@
       align-items: center;
       padding: 1rem;
       z-index: 999;
+      width: 100vw;
     }
+  
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    .nav-left, .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+.navbar button,
+.profile-btn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
 
-    .navbar button, .profile-btn {
-      background: white;
-      color: black;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
+.navbar button:hover,
+.profile-btn:hover {
+  background: #f1f1f1;
+}
 
-    .navbar button:hover, .profile-btn:hover {
-      background: #f1f1f1;
+    .main{
+      width:100vw;
+      height:100vh;
     }
+    
+/* Card grid container */
+#cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-bottom: 100px; /* space for fixed buttons */
+}
+
+/* Card style */
+#cards > div {
+  animation: fadeIn 0.5s ease-in;
+  box-shadow: 0px 0px 5px 10px whiteSmoke;
+  padding: 1rem;
+  width: 200px;
+  border-radius: 10px;
+  background: white;
+  color: black;
+  margin: 1rem;
+  text-align: center;
+  display: grid;
+  gap: 1rem;
+}
+
+img {
+  height: 100px;
+  transition: transform 0.3s ease;
+  object-fit: cover;
+  width: 100%;
+}
+img:hover {
+  transform: scale(1.1);
+}
+.f{
+  padding:40px;
+  position: fixed;
+  bottom: 0;
+  background: black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  z-index: 999;
+  width: 100vw;
+}
     @keyframes marquee {
       from { transform: translateX(100%); }
       to { transform: translateX(-100%); }
     }
+    
+/* Animation Effects */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#cards > div {
+  animation: fadeIn 0.5s ease-in;
+}
+
+button:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+img {
+  transition: transform 0.3s ease;
+}
+img:hover {
+  transform: scale(1.1);
+}
  /* Responsive Styling */
- 
+ @media (max-width: 768px) {
+  .category-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-left,
+  .nav-right {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .bprofile {
+    font-size: 1.2rem;
+  }
+
+  #cards > div {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  #search {
+    width: 90%;
+  }
+
+  #button,
+  #button1 {
+    font-size: 16px;
+    padding: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .navbar {
+    padding: 0.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    align-items: center;
+  }
+
+  .navbar button,
+  .profile-btn {
+    width: 90%;
+    font-size: 14px;
+    padding: 0.5rem;
+  }
+
+  .marquee {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+
+  #search {
+    width: 90%;
+    margin: 0.5rem auto;
+    font-size: 0.9rem;
+  }
+
+  #cards > div {
+    width: 90%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+    padding: 0.8rem;
+  }
+
+  img {
+    height: 80px;
+  }
+
+  .f {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #button,
+  #button1 {
+    width: 90%;
+    font-size: 16px;
+    padding: 0.75rem;
+  }
+
+  .category-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .category-buttons button {
+    width: 90%;
+  }
+}
+
   </style>
 </head>
 <body>
+  <div class="main">
   <div class="marquee">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</div>
   <div class="navbar">
     <div class="nav-left">
-      <button onclick="renderItems(allData)">All</button>
-      <button onclick="renderItems(fruitsData)" id="f">Fruits</button>
-      <button onclick="renderItems(vegetablesData)" id="v">Vegetables</button>
-      <button onclick="renderItems(groceriesData)" id="g">Groceries</button>
+      <button onclick="renderItems(allData)">All <i class="fa-solid fa-basket-shopping"></i></button>
+      <button onclick="renderItems(fruitsData)" id="f">Fruits <i class="fa-solid fa-apple-whole"></i></button>
+      <button onclick="renderItems(vegetablesData)" id="v">Vegetables <i class="fa-solid fa-carrot"></i></button>
+      <button onclick="renderItems(groceriesData)" id="g">Groceries  <i class="fa-solid fa-bag-shopping"></i></button>
     </div>
   <div class="profile-btn">
     <button class="bprofile" id="profile" onclick='profile()'>
@@ -156,13 +321,15 @@
 
 
   <div id="cards"></div>
-  <div class="viewcarts" id="div">
+  <div class="f" id="div">
     <button id="button">Instant</button>
-    <button id="button1">
-      <i class="fa-solid fa-cart-shopping"></i>
+    <button id="button1" >
+    <i class="fa-solid fa-cart-shopping">Viewcart</i>
     </button>
  </div>
  </div>
+ </div>
+
   <script>
    let cartitems = JSON.parse(localStorage.getItem("cart")) || [];
     const fruitsData = [
@@ -310,6 +477,8 @@
       cards.style.display = "flex";
       cards.style.flexWrap = "wrap";
       cards.style.justifyContent = "space-around";
+      cards.style.alignItems="center"
+      cards.style.width="100vw"
     }
     // Render initial fruits
     renderItems(fruitsData);
@@ -331,28 +500,42 @@
    card.style.overflow="auto"
    card.style.zIndex="1000"
    card.style.scrollbarWidth="none"
-    let f=document.getElementById('f');
-   f.addEventListener('click',function()
-   { 
+   card.style.backgroundColor="gray"
+  //  let f=document.getElementById('f');
+  // f.addEventListener('click',function()
+  // { 
     //  e.preventDefault()
+    let div=document.getElementById('div')
+    div.style.width="100%"
+    div.style.backgroundColor="black"
+    div.style.display="flex"
+    div.style.justifyContent="space-around"
+   // div.style.position="relative"
+  //  div.style.zIndex="-1"
+   // div.style.buttom="0"
      let one=document.getElementById('button')
-      one.style.display="block"
-      one.style.display="flex"
-      one.style.cursor="pointer"
-      one.style.position="absolute"
-      one.style.top="600"
-      one.style.bottom="0px"
-      one.style.width="100%"
+     one.style.backgroundColor="black"
+     one.style.color="white"
+     one.style.border="1px solid white"
+     one.style.padding="16px 32px"
+  
 
       //v.style.display="block"
       one.addEventListener('click',()=>{
      window.location.href="ser.html"
       })
 
-   })
      let two=document.getElementById('button1')
     {
-       // two.style.width="100%"
+      two.style.backgroundColor="black"
+      two.style.color="white"
+      two.style.border="1px solid white"
+      two.style.padding="16px 32px"
+  
+      //two.style.position="fixed"
+     // two.style.bottom="0"
+    //  two.style.height="10vh"
+    //  two.style.width="100vw"
         two.addEventListener('click',()=>{
           window.location.href="page4.html"
         })
