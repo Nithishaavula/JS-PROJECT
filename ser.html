@@ -64,9 +64,9 @@
       overflow-y: auto;
     }
     .marquee {
-      background: orange;
+      background: rgb(255, 123, 0);
       color: white;
-      padding: 0.5rem;
+      padding:10px;
       font-weight: bold;
       animation: marquee 15s linear infinite;
     }
@@ -158,10 +158,7 @@ img:hover {
   z-index: 999;
   width: 100vw;
 }
-    @keyframes marquee {
-      from { transform: translateX(100%); }
-      to { transform: translateX(-100%); }
-    }
+
 
 button:hover {
   transform: scale(1.05);
@@ -174,6 +171,62 @@ img {
 img:hover {
   transform: scale(1.1);
 }
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Apply animations to cards */
+.card {
+  animation: fadeInUp 0.6s ease forwards;
+  animation-delay: 0.1s;
+  opacity: 0; /* Hide before animation */
+}
+
+/* Search bar animation */
+#search:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Button hover effect */
+.buttonarea button,
+#quantity button {
+  transition: transform 0.2s ease;
+}
+
+.buttonarea button:hover,
+#quantity button:hover {
+  transform: scale(1.1);
+}
+
+/* Click animation */
+.buttonarea button:active,
+#quantity button:active {
+  transform: scale(0.95);
+}
+
+/* Fade-in cards on scroll (optional, using IntersectionObserver requires JS) */
+
  /* Responsive Styling */
  @media (max-width: 768px) {
   .category-buttons {
@@ -237,11 +290,6 @@ img:hover {
     padding: 0.5rem;
   }
 
-  .marquee {
-    font-size: 0.8rem;
-    padding: 0.4rem;
-  }
-
   #search {
     width: 90%;
     margin: 0.5rem auto;
@@ -291,9 +339,10 @@ img:hover {
 <body>
      
   <div class="main">
-     
+<!--    
   <div class="marquee">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</div>
-
+  -->
+  <marquee behavior="scroll" direction="left" class="marquee" scrolldelay="100">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</marquee>
   <div class="navbar">
 
     <div class="nav-left">
