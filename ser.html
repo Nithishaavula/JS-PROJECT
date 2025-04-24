@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instant Store</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -67,8 +68,6 @@
       color: white;
       padding: 0.5rem;
       font-weight: bold;
-      white-space: nowrap;
-      overflow: hidden;
       animation: marquee 15s linear infinite;
     }
 
@@ -111,14 +110,13 @@
 }
 
     .main{
-      width:100vw;
-      height:100vh;
+      width:100%;
+      max-width: 100%;
     }
     
 /* Card grid container */
 #cards {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   padding-bottom: 100px; /* space for fixed buttons */
 }
@@ -164,16 +162,6 @@ img:hover {
       from { transform: translateX(100%); }
       to { transform: translateX(-100%); }
     }
-    
-/* Animation Effects */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-#cards > div {
-  animation: fadeIn 0.5s ease-in;
-}
 
 button:hover {
   transform: scale(1.05);
@@ -198,8 +186,7 @@ img:hover {
     gap: 0.5rem;
   }
 
-  .nav-left,
-  .nav-right {
+  .nav-left {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
@@ -210,7 +197,7 @@ img:hover {
   }
 
   #cards > div {
-    width: 90%;
+    width: 100%;
     max-width: 300px;
   }
 
@@ -278,6 +265,7 @@ img:hover {
     padding: 0.5rem;
     justify-content: center;
     align-items: center;
+    width:50vw;
   }
 
   #button,
@@ -301,9 +289,13 @@ img:hover {
   </style>
 </head>
 <body>
+     
   <div class="main">
+     
   <div class="marquee">🚛 Fresh Deals Today! | Order Now & Save Big! | Fast Delivery | Add to Cart Now! 🛒</div>
+
   <div class="navbar">
+
     <div class="nav-left">
       <button onclick="renderItems(allData)">All <i class="fa-solid fa-basket-shopping"></i></button>
       <button onclick="renderItems(fruitsData)" id="f">Fruits <i class="fa-solid fa-apple-whole"></i></button>
@@ -344,7 +336,10 @@ img:hover {
       { name: "Watermelon", img: "water.jpeg", weight: "1kg", price: "120" },
       { name: "Papaya", img: "papaya.jpeg", weight: "1kg", price: "130" },
       { name: "Kiwi", img: "kiwi.jpeg", weight: "500gm", price: "140" },
-      { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" }
+      { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" },
+      { name: "Kiwi", img: "kiwi.jpeg", weight: "500gm", price: "140" },
+      { name: "Peach", img: "peach.jpeg", weight: "1kg", price: "150" },
+    { name: "Mango", img: "mango.jpeg", weight: "2kg", price: "60" }
     ];
 
     const vegetablesData = [
@@ -478,7 +473,7 @@ img:hover {
       cards.style.flexWrap = "wrap";
       cards.style.justifyContent = "space-around";
       cards.style.alignItems="center"
-      cards.style.width="100vw"
+     cards.style.maxWidth="100%"
     }
     // Render initial fruits
     renderItems(fruitsData);
@@ -497,16 +492,17 @@ img:hover {
       renderItems(filtered);
     });
     let card=document.getElementById('one')
-   card.style.overflow="auto"
-   card.style.zIndex="1000"
-   card.style.scrollbarWidth="none"
-   card.style.backgroundColor="gray"
+   //card.style.overflow="auto"
+  // card.style.zIndex="1000"
+  // card.style.scrollbarWidth="none"
+   //card.style.backgroundColor="gray"
+  // card.style.maxWidth="100%"
   //  let f=document.getElementById('f');
   // f.addEventListener('click',function()
   // { 
     //  e.preventDefault()
     let div=document.getElementById('div')
-    div.style.width="100%"
+    div.style.width="100vw"
     div.style.backgroundColor="black"
     div.style.display="flex"
     div.style.justifyContent="space-around"
