@@ -124,7 +124,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -158,6 +158,12 @@
     function renderCart() {
       cartItemsContainer.innerHTML = "";
       let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+        totalDisplay.innerText = "Total: ₹0";
+        return;
+      }
 
       cart.forEach((item, index) => {
         const quantity = item.quantity || 1;
@@ -194,7 +200,7 @@
       renderCart();
     };
 
-    renderCart();
+    renderCart(); // Call on load
 
     methodSelect.addEventListener("change", () => {
       const isUPI = methodSelect.value === "UPI";
@@ -211,6 +217,7 @@
 
     upiSelect.addEventListener("change", () => {
       const method = upiSelect.value;
+      upiLabel.innerText = `via ${method}`;
       const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * (item.quantity || 1)), 0).toFixed(2);
       const upiID = "aavulan@fifederal";
       const payeeName = "Aavulan";
@@ -231,6 +238,19 @@
     submitBtn.addEventListener("click", () => {
       if (screenshotInput.files.length > 0) {
         const file = screenshotInput.files[0];
+
+        if (!file.type.startsWith("image/")) {
+          alert("Only image files are allowed.");
+          return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+          alert("File is too large. Max 2MB allowed.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Uploading...";
+
         const storageRef = ref(storage, 'screenshots/' + file.name);
         uploadBytes(storageRef, file).then((snapshot) => {
           return getDownloadURL(snapshot.ref);
@@ -245,10 +265,15 @@
           const orders = JSON.parse(localStorage.getItem("orders")) || [];
           orders.push(order);
           localStorage.setItem("orders", JSON.stringify(orders));
+          localStorage.removeItem("cart");
+          renderCart();
           orderPlacedBtn.style.display = "block";
           submitBtn.style.display = "none";
         }).catch(error => {
           alert("Upload failed: " + error.message);
+        }).finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Submit Payment";
         });
       } else {
         alert("Please upload a payment screenshot.");
@@ -269,8 +294,12 @@
         orders.push(order);
         localStorage.setItem("orders", JSON.stringify(orders));
         localStorage.setItem("address", address);
+        localStorage.removeItem("cart");
+        renderCart();
         orderPlacedBtn.style.display = "block";
         addressSubmitBtn.style.display = "none";
+      } else {
+        alert("Please enter a valid address.");
       }
     });
 
@@ -280,6 +309,7 @@
   </script>
 </body>
 </html>
+
 
 
 
