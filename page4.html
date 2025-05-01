@@ -172,13 +172,12 @@
 
         const row = document.createElement("div");
         row.classList.add("item-row");
-        row.innerHTML = `
-          <span>${item.name} - ₹${item.price} x ${quantity} = ₹${price.toFixed(2)}</span>
-          <div class="item-controls">
-            <button onclick="decreaseQuantity(${index})">−</button>
-            <button onclick="increaseQuantity(${index})">+</button>
-          </div>
-        `;
+        row.innerHTML = row.innerHTML = `
+        <span>${item.name} - ₹${item.price} x ${quantity} = ₹${price.toFixed(2)}</span>
+      `;
+      
+        
+    
         cartItemsContainer.appendChild(row);
       });
 
